@@ -121,14 +121,14 @@ INSERT INTO `districts` (`district`) VALUES
 CREATE TABLE `location` (
   `area` varchar(50) NOT NULL,
   `district` varchar(50) NOT NULL,
-  `sub-district` varchar(50) NOT NULL
+  `subdistrict` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- 資料表的匯出資料 `location`
 --
 
-INSERT INTO `location` (`area`, `district`, `sub-district`) VALUES
+INSERT INTO `location` (`area`, `district`, `subdistrict`) VALUES
 ('Hong Kong', 'Central and Western', 'Admiralty'),
 ('Hong Kong', 'Central and Western', 'Central'),
 ('Hong Kong', 'Central and Western', 'Kennedy Town'),
@@ -295,7 +295,7 @@ CREATE TABLE `restaurant` (
   `tel` varchar(8) NOT NULL,
   `area` varchar(50) NOT NULL,
   `district` varchar(50) NOT NULL,
-  `sub-district` varchar(50) NOT NULL,
+  `subdistrict` varchar(50) NOT NULL,
   `address` varchar(100) NOT NULL,
   `monday` varchar(11) DEFAULT NULL,
   `tuesday` varchar(11) DEFAULT NULL,
@@ -312,7 +312,7 @@ CREATE TABLE `restaurant` (
 -- 資料表的匯出資料 `restaurant`
 --
 
-INSERT INTO `restaurant` (`id`, `name`, `category`, `tel`, `area`, `district`, `sub-district`, `address`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`, `rate`, `visitors`) VALUES
+INSERT INTO `restaurant` (`id`, `name`, `category`, `tel`, `area`, `district`, `subdistrict`, `address`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`, `rate`, `visitors`) VALUES
 (1, 'abc restaurant', 'chinese', '12345678', 'New Territories', 'Sha Tin', 'Tai Wai', 'New Territories, Sha Tin, Tai Wai, Lung Hang Shopping Centre No.22 abc restaurant', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
 
 -- --------------------------------------------------------
@@ -375,18 +375,18 @@ CREATE TABLE `restaurant_owner_connections` (
 -- --------------------------------------------------------
 
 --
--- 資料表結構 `sub-districts`
+-- 資料表結構 `subdistricts`
 --
 
-CREATE TABLE `sub-districts` (
-  `sub-district` varchar(50) NOT NULL
+CREATE TABLE `subdistricts` (
+  `subdistrict` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- 資料表的匯出資料 `sub-districts`
+-- 資料表的匯出資料 `subdistricts`
 --
 
-INSERT INTO `sub-districts` (`sub-district`) VALUES
+INSERT INTO `subdistricts` (`subdistrict`) VALUES
 ('Aberdeen'),
 ('Admiralty'),
 ('Ap Lei Chau'),
@@ -566,9 +566,9 @@ ALTER TABLE `districts`
 -- 資料表索引 `location`
 --
 ALTER TABLE `location`
-  ADD PRIMARY KEY (`area`,`district`,`sub-district`),
+  ADD PRIMARY KEY (`area`,`district`,`subdistrict`),
   ADD KEY `location_district_fk` (`district`),
-  ADD KEY `location_sub-district_fk` (`sub-district`);
+  ADD KEY `location_subdistrict_fk` (`subdistrict`);
 
 --
 -- 資料表索引 `menus`
@@ -591,8 +591,8 @@ ALTER TABLE `restaurant`
   ADD PRIMARY KEY (`id`),
   ADD KEY `restaurant_category_fk` (`category`),
   ADD KEY `restaurant_district_fk` (`district`),
-  ADD KEY `restaurant_sub-district_fk` (`sub-district`),
-  ADD KEY `restaurant_location_fk` (`area`,`district`,`sub-district`);
+  ADD KEY `restaurant_subdistrict_fk` (`subdistrict`),
+  ADD KEY `restaurant_location_fk` (`area`,`district`,`subdistrict`);
 
 --
 -- 資料表索引 `restaurant_category`
@@ -621,10 +621,10 @@ ALTER TABLE `restaurant_owner_connections`
   ADD KEY `restaurant_owner_reid_fk` (`restaurant_id`);
 
 --
--- 資料表索引 `sub-districts`
+-- 資料表索引 `subdistricts`
 --
-ALTER TABLE `sub-districts`
-  ADD PRIMARY KEY (`sub-district`);
+ALTER TABLE `subdistricts`
+  ADD PRIMARY KEY (`subdistrict`);
 
 --
 -- 資料表索引 `user`
@@ -671,7 +671,7 @@ ALTER TABLE `comments`
 ALTER TABLE `location`
   ADD CONSTRAINT `location_area_fk` FOREIGN KEY (`area`) REFERENCES `areas` (`area`),
   ADD CONSTRAINT `location_district_fk` FOREIGN KEY (`district`) REFERENCES `districts` (`district`),
-  ADD CONSTRAINT `location_sub-district_fk` FOREIGN KEY (`sub-district`) REFERENCES `sub-districts` (`sub-district`);
+  ADD CONSTRAINT `location_subdistrict_fk` FOREIGN KEY (`subdistrict`) REFERENCES `subdistricts` (`subdistrict`);
 
 --
 -- 資料表的 Constraints `menus`
@@ -692,7 +692,7 @@ ALTER TABLE `menu_collections`
 --
 ALTER TABLE `restaurant`
   ADD CONSTRAINT `restaurant_category_fk` FOREIGN KEY (`category`) REFERENCES `restaurant_category` (`category`),
-  ADD CONSTRAINT `restaurant_location_fk` FOREIGN KEY (`area`,`district`,`sub-district`) REFERENCES `location` (`area`, `district`, `sub-district`);
+  ADD CONSTRAINT `restaurant_location_fk` FOREIGN KEY (`area`,`district`,`subdistrict`) REFERENCES `location` (`area`, `district`, `subdistrict`);
 
 --
 -- 資料表的 Constraints `restaurant_collections`
