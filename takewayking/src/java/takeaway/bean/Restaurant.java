@@ -14,7 +14,7 @@ public class Restaurant {
             area, district, subdistrict, address, //  
             monday, tuesday, wednesday, thursday, friday, saturday, sunday, 
             rate, visitors;
-
+    private int id;
     public String getName() {
         return name;
     }
@@ -141,6 +141,20 @@ public class Restaurant {
 
     public void setVisitors(String visitors) {
         this.visitors = visitors;
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
     }
     
 }

@@ -1,3 +1,7 @@
+<%-- JSP import --%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="takeaway.servlet.CMS" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -541,10 +545,23 @@
              <div class="grid-margin stretch-card">
             <div class="form-group">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <!-- <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
                 <div class="input-group-append">
                   <button class="btn btn-sm btn-gradient-primary" type="button">Search</button>
-                </div>
+                </div> -->
+                <select  id="value" name='pageName' ">  
+                  <option value="">-=View All=-</option>  
+                  <%
+                       CMS cms = new CMS();
+                       ArrayList<String> result = cms.getAlllAreas();
+                       for(int i = 0 ; i <= result.size() ; i++){
+                  %>
+
+                  <option value="<%=result.get(i)%>"><%=result.get(i)%></option>  
+                  <%                              
+                     }
+                  %>
+              </select>
               </div>
             </div>
             </div>
