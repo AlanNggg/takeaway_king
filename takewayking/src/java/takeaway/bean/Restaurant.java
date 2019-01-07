@@ -12,9 +12,8 @@ package takeaway.bean;
 public class Restaurant {
     private String name, category, tel, 
             area, district, subdistrict, address, //  
-            monday, tuesday, wednesday, thursday, friday, saturday, sunday, 
-            rate, visitors;
-    private int id;
+            monday, tuesday, wednesday, thursday, friday, saturday, sunday;
+    private int id, rate, visitors;
     public String getName() {
         return name;
     }
@@ -127,19 +126,19 @@ public class Restaurant {
         this.sunday = sunday;
     }
 
-    public String getRate() {
+    public int getRate() {
         return rate;
     }
 
-    public void setRate(String rate) {
+    public void setRate(int rate) {
         this.rate = rate;
     }
 
-    public String getVisitors() {
+    public int getVisitors() {
         return visitors;
     }
 
-    public void setVisitors(String visitors) {
+    public void setVisitors(int visitors) {
         this.visitors = visitors;
     }
 
