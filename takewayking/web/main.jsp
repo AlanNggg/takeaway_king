@@ -4,11 +4,7 @@
     Author     : user
 --%>
 
-<%@page import="java.util.Set"%>
-<%@page import="java.util.HashSet"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="takeaway.db.LocationDB"%>
-<%@page import="takeaway.bean.Location"%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -19,47 +15,7 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     </head>
     <body>
-        <%!
-            private ArrayList<Location> locations = null;
 
-            private String getArea(String district) {
-                String area = "";
-                for (Location location : locations) {
-                    if (location.getDistrict() == district) {
-                        area = location.getArea();
-                    }
-                }
-                return area;
-            }
-
-            private String getDistrict(String subdistrict) {
-                String district = "";
-                for (Location location : locations) {
-                    if (location.getSubdistrict() == subdistrict) {
-                        district = location.getDistrict();
-                    }
-                }
-                return district;
-            }
-        %>
-        <%
-            String dbUser = this.getServletContext().getInitParameter("dbUser");
-            String dbPassword = this.getServletContext().getInitParameter("dbPassword");
-            String dbUrl = this.getServletContext().getInitParameter("dbUrl");
-            LocationDB locationDb = new LocationDB(dbUrl, dbUser, dbPassword);
-            locations = locationDb.queryLocation();
-            ArrayList<String> areaList = new ArrayList<String>();
-            ArrayList<String> districtList = new ArrayList<String>();
-            ArrayList<String> subdistrictList = new ArrayList<String>();
-            for (Location location : locations) {
-                areaList.add(location.getArea());
-                districtList.add(location.getDistrict());
-                subdistrictList.add(location.getSubdistrict());
-            }
-            Set<String> areas = new HashSet<String>(areaList);
-            Set<String> districts = new HashSet<String>(districtList);
-            Set<String> subdistricts = new HashSet<String>(subdistrictList);
-        %>
         
         <jsp:include page="header.jsp"/>
         <jsp:include page="menu.jsp"/>
