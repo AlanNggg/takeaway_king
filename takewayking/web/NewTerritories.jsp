@@ -18,7 +18,7 @@
     private ArrayList<Location> locations = null;
 
     private String[] getArea(String[] districts) {
-        String[] areas = null;
+        String[] areas = new String[districts.length];
         for (int i = 0; i < districts.length; i++) {
             for (Location location : locations) {
                 if (location.getDistrict() == districts[i]) {
@@ -30,7 +30,7 @@
     }
 
     private String[] getDistrict(String[] subdistricts) {
-        String[] districts = null;
+        String[] districts = new String[subdistricts.length];
         for (int i = 0; i < subdistricts.length; i++) {
             for (Location location : locations) {
                 if (location.getSubdistrict() == subdistricts[i]) {
@@ -104,8 +104,8 @@
         <nav style="position: relative; top: 80px; background-color: rgba(90, 90, 90, 0.7);  padding: 0 1.5em; display: flex; align-items: center; height: 80px;">
             <form method="post" action="#" style="position: relative; display: flex; align-items: center; float: right; width: 100%; height: 100%; margin: 0px;">
                 <tk:selector options="<%=areas%>" name="area"/>
-                <tk:selector options="<%=districts%>" name="district" />
-                <tk:selector options="<%=subdistricts%>" name="subdistrict"/>
+                <tk:selector options="<%=districts%>" name="district" belongTo="<%=getArea(districts)%>"/>
+                <tk:selector options="<%=subdistricts%>" name="subdistrict" belongTo="<%=getDistrict(subdistricts)%>"/>
                 
                 <!--                <div class="select-wrapper">
                                     <select name="area">
