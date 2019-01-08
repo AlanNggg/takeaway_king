@@ -55,7 +55,7 @@ public class SelectorTag extends SimpleTagSupport {
             for (int i = 0; i < options.length; i++) {
                 allOptions += "<option value=\"" + options[i] + "\"";
                 if (belongTo != null) {
-                    allOptions += "class=\"" + belongTo[i] + "\"";
+                    allOptions += "class=\"" + belongTo[i].replace(" ", "") + "\"";
                 } 
                 allOptions +=">" +  ToUpperFirstLetter(options[i]) + "</option>\n";
             }
