@@ -126,7 +126,9 @@ public class LoginController extends HttpServlet {
             session.removeAttribute("user");
             session.invalidate();
         }
-        doLogin(request, response);
+        RequestDispatcher rd;
+        rd = getServletContext().getRequestDispatcher("/main.jsp");
+        rd.forward(request, response);
     }
     
     @Override
