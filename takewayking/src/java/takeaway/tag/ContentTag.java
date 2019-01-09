@@ -67,7 +67,7 @@ public class ContentTag extends SimpleTagSupport {
                     + "                <div style=\"display: table; width: 100%; height: 100%;\">\n"
                     + "                    <sup style=\"font-size: 30px; display: table-cell; vertical-align: middle;\"><i class=\"fas fa-star\" style=\"color: #fffa86;\"></i></sup>\n"
                     + "                    <h2 style=\"color: #fc583f; display: table-cell; vertical-align: middle;\">" + area + "</h2>\n"
-                    + "                    <a href=\"" + area.replace(" ", "") + ".jsp\" class=\"button alt fit\" style=\"float: right; display: table-cell; vertical-align: middle;\">Find More</a>\n"
+                    + "                    <a href=\"Detail.jsp\" class=\"button alt fit\" style=\"float: right; display: table-cell; vertical-align: middle;\">Find More</a>\n"
                     + "                </div>\n"
                     + "            </header>\n"
                     + "            <hr style=\"margin: 1.4rem 0;\">\n"

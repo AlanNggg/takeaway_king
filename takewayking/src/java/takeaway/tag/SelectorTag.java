@@ -61,7 +61,7 @@ public class SelectorTag extends SimpleTagSupport {
             }
 
             out.println("<div class=\"select-wrapper\">\n"
-                    + "     <select name=\"" + name + "\">\n"
+                    + "     <select id=\"" + name + "\" name=\"" + name + "\">\n"
                     + "<option value=\"0\">- " + ToUpperFirstLetter(name) + " -</option>\n"
                     + allOptions
                     + "     </select>\n"
