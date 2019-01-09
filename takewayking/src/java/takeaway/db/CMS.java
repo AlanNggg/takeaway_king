@@ -5,12 +5,14 @@
  */
 package takeaway.db;
 
+import java.sql.Statement;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import takeaway.bean.Menus;
 import takeaway.bean.Restaurant;
 import takeaway.bean.User;
 import takeaway.db.UserDB;
@@ -110,6 +112,55 @@ public class CMS extends UserDB {
        } 
        return result;
    }
+           public ArrayList<Restaurant> getRestListById(String id){
+        Connection cnnt = null;
+       PreparedStatement pStmnt = null;
+       User user = null;
+       ArrayList<Restaurant> result = new ArrayList<Restaurant>();
+       try {
+           cnnt = getConnection();
+           String preQueryStatement = "SELECT * FROM restaurant where id = ?";
+           pStmnt = cnnt.prepareStatement(preQueryStatement);
+           pStmnt.setString(1, id);
+
+            ResultSet rs = null;
+           rs = pStmnt.executeQuery();
+           if (rs.next()) {
+               Restaurant restaurant = new Restaurant();
+               restaurant.setId(rs.getInt(1));
+                restaurant.setName(rs.getString(2));
+                restaurant.setCategory(rs.getString(3));
+                restaurant.setTel(rs.getString(4));
+                restaurant.setArea(rs.getString(5));
+                restaurant.setDistrict(rs.getString(6));
+                restaurant.setSubdistrict(rs.getString(7));
+                restaurant.setAddress(rs.getString(8));
+                restaurant.setMonday(rs.getString(9));
+                restaurant.setTuesday(rs.getString(10));
+                restaurant.setWednesday(rs.getString(11));
+                restaurant.setThursday(rs.getString(12));
+                restaurant.setFriday(rs.getString(13));
+                restaurant.setSaturday(rs.getString(14));
+                restaurant.setSunday(rs.getString(15));
+                restaurant.setRate(rs.getInt(16));
+                restaurant.setVisitors(rs.getInt(17));
+
+             
+               result.add(restaurant);
+               
+           }
+           pStmnt.close();
+           cnnt.close();
+       } catch (SQLException ex) {
+           while (ex != null) {
+               ex.printStackTrace();
+               ex = ex.getNextException();
+           }
+       } catch (IOException ex) {
+           ex.printStackTrace();
+       } 
+       return result;
+   }
        public ArrayList<Restaurant> getRestList(String area,String dist,String subdist){
         Connection cnnt = null;
        PreparedStatement pStmnt = null;
@@ -132,6 +183,98 @@ public class CMS extends UserDB {
                rest.setId(rs.getInt(1));
                result.add(rest);
                
+           }
+           pStmnt.close();
+           cnnt.close();
+       } catch (SQLException ex) {
+           while (ex != null) {
+               ex.printStackTrace();
+               ex = ex.getNextException();
+           }
+       } catch (IOException ex) {
+           ex.printStackTrace();
+       } 
+       return result;
+   }
+       
+   public boolean saveMenuToDB(String id,String menuList){
+          int flag = 0;
+          Connection cnnt = null;
+         Statement stmnt = null;
+        try {
+            cnnt = getConnection();
+          stmnt = cnnt.createStatement();
+            String sql = "INSERT INTO menus (restaurant_id,menu) VALUES ( "+id+" , '" + menuList+"' )";
+            flag = stmnt.executeUpdate(sql);
+         
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+         if(flag == 1){
+              return true;
+          }else{
+              return false;
+          }
+   }
+   public ArrayList<Menus> getMenusByRid(String rid){
+         Connection cnnt = null;
+       PreparedStatement pStmnt = null;
+       Menus menu = null;
+      ArrayList<Menus> result = new ArrayList<>();
+       try {
+           cnnt = getConnection();
+           String preQueryStatement = "SELECT * FROM menus WHERE restaurant_id = ? ";
+           pStmnt = cnnt.prepareStatement(preQueryStatement);
+           pStmnt.setString(1, rid);
+            ResultSet rs = null;
+           rs = pStmnt.executeQuery();
+           if(rs.next()) {  
+               menu = new Menus();
+               menu.setId(rs.getString("id"));
+               menu.setRestaurant_id(rs.getString("restaurant_id"));
+               menu.setMenu(rs.getString("menu"));
+               menu.setDatetime(rs.getString("datetime"));
+               menu.setRate(rs.getString("rate"));
+               result.add(menu);
+           }
+           pStmnt.close();
+           cnnt.close();
+       } catch (SQLException ex) {
+           while (ex != null) {
+               ex.printStackTrace();
+               ex = ex.getNextException();
+           }
+       } catch (IOException ex) {
+           ex.printStackTrace();
+       } 
+       return result;
+   }
+   public ArrayList<Menus> getMenus(String rid){
+        Connection cnnt = null;
+       PreparedStatement pStmnt = null;
+       Menus m = null;
+       ArrayList<Menus> result = new ArrayList<Menus>();
+       try {
+           cnnt = getConnection();
+           String preQueryStatement = "SELECT * FROM menus where restaurant_id= ?";
+           pStmnt = cnnt.prepareStatement(preQueryStatement);
+           pStmnt.setString(1, rid);
+            ResultSet rs = null;
+           rs = pStmnt.executeQuery();
+           while(rs.next()) {  
+                m = new Menus();
+                m.setId(rs.getString("id"));
+                m.setMenu(rs.getString("menu"));
+                m.setRestaurant_id(rs.getString("restaurant_id"));
+                m.setDatetime(rs.getString("datetime"));
+                m.setRate(rs.getString("rate"));
+                result.add(m);
            }
            pStmnt.close();
            cnnt.close();

@@ -6,6 +6,7 @@
 package takeaway.test;
 
 import java.util.ArrayList;
+import takeaway.bean.Menus;
 import takeaway.bean.Restaurant;
 import takeaway.db.UserDB;
 import takeaway.db.CMS;
@@ -20,9 +21,9 @@ public class TestCMS {
         String username = "root";
         String password = "";
         CMS user = new CMS(url, username, password);
-        ArrayList<Restaurant> rs = user.getRestList("New Territories", "Sha Tin", "Tai Wai");
-        Restaurant rest = rs.get(0);
-        System.out.print(rest.getName());
+        ArrayList<Menus> rs = user.getMenus("1");
+        Menus rest = rs.get(0);
+        System.out.print(rest.getMenu());
        
     }
 }
