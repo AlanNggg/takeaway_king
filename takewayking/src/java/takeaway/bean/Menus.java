@@ -10,7 +10,7 @@ package takeaway.bean;
  * @author user
  */
 public class Menus {
-    private String restaurant_id, menu, datetime, rate; // datetime varchar(11) 31Dec-31Jan
+    private String id,restaurant_id, menu, datetime, rate; // datetime varchar(11) 31Dec-31Jan
 
     public String getRestaurant_id() {
         return restaurant_id;
@@ -42,6 +42,20 @@ public class Menus {
 
     public void setRate(String rate) {
         this.rate = rate;
+    }
+
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
     }
     
 }

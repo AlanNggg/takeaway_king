@@ -2,6 +2,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="takeaway.db.CMS" %>
+<%@page import="takeaway.bean.Menus" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -26,6 +27,13 @@
                     background:gray;
                     opacity: 0.5;
                     display: none;
+                }
+
+                .image_selected_style{
+                    float:left;
+                    margin-right: 10px;
+                    height:100px;
+                    width:100px;
                 }
         </style>
     </head>
@@ -58,14 +66,39 @@
               <table id="shoplist" border="1"></table>
 
               <div id="uploadBox">
-                    <form action="cmsController" method="post" enctype="multipart/form-data">
-                        <input id="upload_Image" type="file" multiple/>
-                        <input type="submit" name="Submit" value="Submit files"/>
-                    </form>
+
+                    <form action="upLoadMenuImage" method="post" enctype="multipart/form-data"> 
+                        <input id="upload_Image"name="upload_Image" type="file" accept="image/png" multiple />
+                        <input id="upload_rest_id" name="upload_rest_id" type="text">
+                        <input id="submit_menu_selected" type="submit" value="Upload"/>
+                     </form> 
+                    <div id="image_selected"></div>
               </div>
-              
+
+              <div id="result_Imgas"></div>
+
+              <form action="restaurant_detail.jsp" method="get">
+                  <input id="rest_id_selected" type="text" id="rid" name="rid">
+                  <input id="jump_restaurant_detail"type="submit"/>
+              </form> 
+               
               <script>
                 var filelist = [];
+
+                function display_upload_image_page(rsid){
+                                document.getElementById("rest_id_selected").value = rsid;
+                                document.getElementById("jump_restaurant_detail").click();
+//
+//                            var xmlHttp = new XMLHttpRequest();
+//                            xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+//                            xmlHttp.send( null );
+//                            return xmlHttp.responseText;
+//
+                              //  document.getElementById("shadow").style.display = "block";
+                              //  document.getElementById("uploadBox").style.display = "block";
+                              //  document.getElementById("upload_rest_id").value = rsid;
+                              
+                  }
                   //handle district select box
                   document.getElementById("areas").onchange = function(){
                           
@@ -144,7 +177,7 @@
                                 xhttp.onreadystatechange = function() {
                                   if (this.readyState === 4 && this.status === 200) {
                                     var data = JSON.parse(this.responseText);
-                                    console.log(data);
+                                   console.log(data);
                                     var x = document.getElementById("shoplist");
                                    x.innerHTML = "<td>ID</td><td>Name</td><td>Category</td><td>Address</td><td></td>";
                                     for(let i = 0 ; i < data.length ; i++){
@@ -160,14 +193,12 @@
                                         cell2.innerHTML = data[i]["name"];
                                         cell3.innerHTML = data[i].category;
                                         cell4.innerHTML = data[i].address;
-                                        cell5.innerHTML = '<button type="button" onclick=uploadImage('+ data[i]["id"]+')>upload</button>';
+                                        cell5.innerHTML = "<button onclick=display_upload_image_page('"+ data[i].id +"')>upload</button>";
                                     }
                                  
                                   }
                               
                                 };
-                            
-                          
                                 xhttp.open("POST", "cmsController", true);
                                 xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                                 xhttp.send("action=getRestList&dist="+ dist + "&areas="+ area + "&subdist="+subdist);
@@ -177,17 +208,68 @@
                                 this.style.display = "none";
                                 document.getElementById("uploadBox").style.display = "none";
                             }
-                            function uploadImage(id){
-                                document.getElementById("shadow").style.display = "block";
-                                document.getElementById("uploadBox").style.display = "block";
+
+                            
+
+
+                            function getBase64(file, onLoadCallback) {
+                                return new Promise(function(resolve, reject) {
+                                    var reader = new FileReader();
+                                    reader.onload = function() { resolve(reader.result); };
+                                    reader.onerror = reject;
+                                    reader.readAsDataURL(file);
+                                });
                             }
+
                             document.getElementById("upload_Image").addEventListener('change',function(event){
                                     
+                                    
                                     for(let i = 0 ; i < this.files.length;i++){
-                                        filelist.push(this.files[i]);
+                                        var promise = getBase64(this.files[i]);
+                                        promise.then(function(result) {
+                                                console.log(result);
+                                                filelist.push(result);
+                                                document.getElementById("image_selected").innerHTML 
+                                                                        += '<img class="image_selected_style" src=" '+ result +' "></img>';
+                                         });
+                                      
+                                        //filelist.push(""+reader.result);
+                                       // document.getElementById("image_selected").innerHTML += '<img src=" '+ reader.result +' "></img>';
                                     }
-                                    console.log(filelist);
+                                   
+                                   console.log(filelist);
                             });
+                            //  document.getElementById("submit_menu_selected").onclick = function(){
+                                
+                            //     if (filelist == null){
+                            //         console.log("no image selected");
+                            //         return;
+                            //     }
+                            //     var rid =  document.getElementById("upload_rest_id").value;
+                            //     var xhttp = new XMLHttpRequest();
+                            //                 xhttp.onreadystatechange = function() {
+                            //                 if (this.readyState === 4 && this.status === 200) {
+                            //                     document.getElementById("shadow").onclick();
+                            //                     console.log("Update Scuess");
+                            //                     window.location = "./uploadMenu.jsp";
+                            //                 //     var json = JSON.parse(this.responseText)
+                            //                 //     console.log(json[0].menu);
+                            //                 //     var menu = json[0].menu + "";
+                            //                 //      document.getElementById("result_Imgas").innerHTML 
+                            //                 //                             += '<img class="image_selected_style" src="'+ menu +'"></img>';
+
+                            //                 // }
+                                        
+                            //                 };
+                            //                 }
+                                            
+                            //                 xhttp.open("POST", "cmsController", true);
+                            //                 xhttp.setRequestHeader("Content-type", "application/json");
+                            //                 var files = JSON.stringify({id:rid,image:filelist});
+                            //                 xhttp.send(files);
+                            
+                            // }
+                           
                   </script>
                  
     </body>

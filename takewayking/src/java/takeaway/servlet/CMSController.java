@@ -17,9 +17,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import takeaway.bean.Menus;
 import takeaway.bean.Restaurant;
 import takeaway.bean.User;
 import takeaway.db.CMS;
+
 
 @WebServlet(name = "CMSController", urlPatterns = {"/cmsController"})
 public class CMSController extends HttpServlet {
@@ -69,6 +71,7 @@ public class CMSController extends HttpServlet {
 
                response.setContentType("application/json");
                response.getWriter().print(json.toString());
+               
         }else if(action.equals("getRestList")){
             String areas = request.getParameter("areas");
             String dist = request.getParameter("dist");
@@ -88,10 +91,65 @@ public class CMSController extends HttpServlet {
              JsonArray json = array.build();
             response.setContentType("application/json");
             response.getWriter().print(json.toString());
-        }else if(ServletFileUpload.isMultipartContent(request)){
-                    System.out.print("dasdasdasdasd");
+            
+        }else if(action.equals("uploadMenu")){
+                String id = request.getParameter("id");
+                String menus = request.getParameter("menus");
+          
+               boolean flag = db.saveMenuToDB(id, menus.trim());
+                            
+                      
+                 
+                if(!flag){
+                        System.out.print("Insert fail ");
+                        return;
+                }
+                  response.getWriter().print("Scuess!");
+                  
+        }else if(action.equals("getMenuByRid")){
+                String id = request.getParameter("rid");
+                ArrayList<Menus>menu =db.getMenus(id);
+
+              JsonObjectBuilder jb = Json.createObjectBuilder();
+            JsonArrayBuilder array = Json.createArrayBuilder();
+            jb.add("rest_id",menu.get(0).getRestaurant_id());
+           for(int i = 0 ; i< menu.size();i++ ){
+               array.add(
+                       Json.createObjectBuilder()
+                                .add("id",menu.get(i).getId())
+                                .add("menu", menu.get(i).getMenu())
+                                .add("datetime", menu.get(i).getDatetime())
+                                 .add("rate", menu.get(i).getRate())
+                             );
+           }
+           jb.add("menus",array);
+           JsonObject json = jb.build();
+           
+            response.setContentType("application/json");
+            response.getWriter().print(json.toString());
         }
-    }
+              
+//                ArrayList<Menus>list =db.getMenus("1");
+//            JsonArrayBuilder array = Json.createArrayBuilder();
+//             for(int i = 0 ; i< list.size();i++ ){
+//                 Menus rest = list.get(i);
+//                 array.add(
+//                         Json.createObjectBuilder()
+//                                .add("id",rest.getId())
+//                                .add("rsid", rest.getRestaurant_id())
+//                                .add("menu",rest.getMenu())
+//                                .add("date",rest.getDatetime())
+//                                .add("rate",rest.getRate())
+//                        );
+//              }
+//             JsonArray json = array.build();
+//            response.setContentType("application/json");
+//            response.getWriter().print(json.toString());
+              
+                
+            
+        }
+    
 
 
     @Override
