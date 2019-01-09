@@ -6,6 +6,7 @@
 package takeaway.tag;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
@@ -57,11 +58,14 @@ public class BoxTag extends SimpleTagSupport {
             PageContext pageContext = (PageContext) getJspContext();
             JspWriter out = pageContext.getOut();
             out.println("<div class=\"contentbox\">\n"
+                    + "<div class=\"boxTitle\">" + name + "</div>"
                     + "         <a href=\"#\" title=\"" + name + "\n\nCategory: " + category
-                    + "\n\nAddress: " + address + "\n\nTel: " + tel + "\" rel=\"bookmark\" class=\"thumb-post\">\n"
-                    + "             <img src=\"./Menu/3.jpg\" alt=\"omk\" height=\"80\" width=\"80\">\n"
-                    + "         </a>\n"
-                    + "     </div>");
+                    + "\n\nAddress: " + address + "\n\nTel: " + tel + "\" rel=\"bookmark\" class=\"thumb-post\">\n");
+            StringWriter sw = new StringWriter();
+            this.getJspBody().invoke(sw);
+            this.getJspContext().getOut().println(sw.toString());
+            out.println("\n</a>\n"
+                    + "</div>");
         } catch (IOException e) {
             e.printStackTrace();
         }
