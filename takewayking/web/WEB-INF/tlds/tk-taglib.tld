@@ -66,7 +66,7 @@
     <tag>
         <name>box</name>
         <tag-class>takeaway.tag.BoxTag</tag-class>
-        <body-content>empty</body-content>
+        <body-content>scriptless</body-content>
         <info>Generate Menu Box</info>
         <attribute>
             <name>name</name>
