@@ -39,6 +39,29 @@ public class RestaurantDB {
         }
         return null;
     }
+    
+    public int queryCountRow() {
+        Connection cnnt = null;
+        PreparedStatement pStmnt = null;
+        int count = 0;
+        try {
+            cnnt = getConnection();
+            String preQueryStatement = "SELECT COUNT(*) FROM RESTAURANT";
+            pStmnt = cnnt.prepareStatement(preQueryStatement);
+            ResultSet rs = null;
+            rs = pStmnt.executeQuery();
+            rs.next();
+            count = rs.getInt(1);
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return count;
+    }
     public ArrayList<Restaurant> queryRestaurant() {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
