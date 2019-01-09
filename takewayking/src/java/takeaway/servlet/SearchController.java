@@ -102,49 +102,89 @@ public class SearchController extends HttpServlet {
         String category = request.getParameter("category");
         String keyword = request.getParameter("keyword");
         String query = request.getParameter("query");
-        
-        if (area != null && !area.equals("0"))
+
+        if (area != null && !area.equals("0")) {
             request.setAttribute("area", area);
-        if (district != null && !district.equals("0"))
+        }
+        if (district != null && !district.equals("0")) {
             request.setAttribute("district", district);
-        if (subdistrict != null && !subdistrict.equals("0"))
+        }
+        if (subdistrict != null && !subdistrict.equals("0")) {
             request.setAttribute("subdistrict", subdistrict);
-            
+        }
+        if (category != null && !category.equals("0")) {
+            request.setAttribute("category", category);
+        }
+        if (keyword != null && !keyword.equals("keyword")) {
+            request.setAttribute("keyword", keyword);
+        }
+
         ArrayList<Restaurant> restaurants = new ArrayList<>();
-        
+
         if (subdistrict != null && !subdistrict.equals("0")) {
             if (category != null && !category.equals("0")) {
                 if (keyword != null && !keyword.equals("0") && query != null && query.length() > 0) {
-
+                    restaurants = db.queryRestaurantBySubdistrictAndCategoryAndKeyword(subdistrict, category, keyword, query);
                 } else {
+                    //     Search Subdistrict And Category
                     restaurants = db.queryRestaurantBySubdistrictAndCategory(subdistrict, category);
                 }
             } else {
-                restaurants = db.queryRestaurantBySubdistrict(subdistrict);
+                if (keyword != null && !keyword.equals("0") && query != null && !query.trim().equals("")) {
+                    restaurants = db.queryRestaurantBySubdistrictAndKeyword(subdistrict, keyword, query);
+                } else {
+                    //    Search Subdistrict Only
+                    restaurants = db.queryRestaurantBySubdistrict(subdistrict);
+                }
             }
         } else if (district != null && !district.equals("0")) {
             if (category != null && !category.equals("0")) {
                 if (keyword != null && !keyword.equals("0") && query != null && !query.trim().equals("")) {
-
+                    restaurants = db.queryRestaurantByDistrictAndCategoryAndKeyword(district, category, keyword, query);
                 } else {
+                    //     Search District And Category
                     restaurants = db.queryRestaurantByDistrictAndCategory(district, category);
                 }
             } else {
-                restaurants = db.queryRestaurantByDistrict(district);
+                if (keyword != null && !keyword.equals("0") && query != null && !query.trim().equals("")) {
+                    //     Search District And Keyword Name
+                    restaurants = db.queryRestaurantByDistrictAndKeyword(district, keyword, query);
+                } else {
+                    //    Search District Only
+                    restaurants = db.queryRestaurantByDistrict(district);
+                }
             }
         } else if (area != null && !area.equals("0")) {
             if (category != null && !category.equals("0")) {
                 if (keyword != null && !keyword.equals("0") && query != null && !query.trim().equals("")) {
-
+                    restaurants = db.queryRestaurantByAreaAndCategoryAndKeyword(area, category, keyword, query);
                 } else {
+                    //     Search Area And Category
                     restaurants = db.queryRestaurantByAreaAndCategory(area, category);
                 }
             } else {
-                restaurants = db.queryRestaurantByArea(area);
+                if (keyword != null && !keyword.equals("0") && query != null && !query.trim().equals("")) {
+                    //     Search Area And Keyword Name
+                    restaurants = db.queryRestaurantByAreaAndKeyword(area, keyword, query);
+                } else {
+                    //    Search Area Only
+                    restaurants = db.queryRestaurantByArea(area);
+                }
             }
+        } else if (category != null && !category.equals("0")) {
+            if (keyword != null && !keyword.equals("0") && query != null && !query.trim().equals("")) {
+                restaurants = db.queryRestaurantByCategoryAndKeyword(category, keyword, query);
+            } else {
+                //     Search Category
+                restaurants = db.queryRestaurantByCategory(category);
+            }
+        } else if (keyword != null && !keyword.equals("0") && query != null && !query.trim().equals("")) {
+            restaurants = db.queryRestaurantByKeyword(keyword, query);
         } else {
+            //     Search All
             restaurants = db.queryRestaurant();
         }
+
         return restaurants;
     }
 
