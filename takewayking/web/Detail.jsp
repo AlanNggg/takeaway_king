@@ -4,6 +4,7 @@
     Author     : user
 --%>
 
+<%@page import="java.awt.Menu"%>
 <%@page import="takeaway.bean.Category"%>
 <%@page import="takeaway.db.CategoryDB"%>
 <%@taglib uri="/WEB-INF/tlds/tk-taglib" prefix="tk"%>
@@ -19,6 +20,8 @@
 <%!
     private ArrayList<Location> locations = null;
     private ArrayList<Category> categories = null;
+    private ArrayList<Restaurant> restaurants = null;
+    private ArrayList<Menu> menus = null;
 
     private String[] getArea(String[] districts) {
         String[] areas = new String[districts.length];
@@ -107,6 +110,17 @@
         </style>
     </head>
     <body>
+        <%
+            restaurants = (ArrayList<Restaurant>) request.getAttribute("restaurants");
+            String selectedArea = (String) request.getAttribute("area");
+            String selectedDistrict = (String) request.getAttribute("district");
+            String selectedSubdistrict = (String) request.getAttribute("subdistrict");
+
+            if (restaurants == null) {
+                RestaurantDB restaurantDb = new RestaurantDB(dbUrl, dbUser, dbPassword);
+                restaurants = restaurantDb.queryRestaurant();
+            }
+        %>
         <jsp:include page="header.jsp"/>
         <nav style="position: relative; top: 80px; background-color: rgba(90, 90, 90, 0.7);  padding: 0 1.5em; display: flex; align-items: center; height: 80px;">
             <form method="get" action="search" style="position: relative; display: flex; align-items: center; float: right; width: 100%; height: 100%; margin: 0px;">
@@ -116,56 +130,17 @@
                 <i class="fas fa-angle-right" style="font-size: 30px;"></i>
                 <tk:selector options="<%=subdistricts%>" name="subdistrict" belongTo="<%=getDistrict(subdistricts)%>"/>
                 <tk:selector options="<%=categoryArray%>" name="category"/>
-
-                <!--                <div class="select-wrapper">
-                                    <select name="area">
-                                        <option value="">- Area -</option>
-                                        <option value="1">Manufacturing</option>
-                                        <option value="1">Shipping</option>
-                                        <option value="1">Administration</option>
-                                        <option value="1">Human Resources</option>
-                                    </select>
-                                </div>
-                                <i class="fas fa-angle-right" style="font-size: 30px;"></i>
-                                <div class="select-wrapper">
-                                    <select name="district">
-                                        <option value="">- District -</option>
-                                        <option value="1" >Manufacturing</option>
-                                        <option value="1">Shipping</option>
-                                        <option value="1">Administration</option>
-                                        <option value="1">Human Resources</option>
-                                    </select>
-                                </div>
-                                <i class="fas fa-angle-right" style="font-size: 30px;"></i>
-                                <div class="select-wrapper">
-                                    <select name="subdistrict">
-                                        <option value="">- Sub-district -</option>
-                                        <option value="1">Manufacturing</option>
-                                        <option value="1">Shipping</option>
-                                        <option value="1">Administration</option>
-                                        <option value="1">Human Resources</option>
-                                    </select>
-                                </div>
-                                <div class="select-wrapper">
-                                    <select name="category">
-                                        <option value="">- Category -</option>
-                                        <option value="1">Manufacturing</option>
-                                        <option value="1">Shipping</option>
-                                        <option value="1">Administration</option>
-                                        <option value="1">Human Resources</option>
-                                    </select>
-                                </div>-->
                 <tk:search />
             </form>
         </nav>
         <div class="contentarea">
-            <div class="contentbox">
-                <a href="#" title="合記粥店" rel="bookmark" class="thumb-post">
-                    <img src="./Menu/3.jpg" alt="omk" height="80" width="80">
-                </a>
-            </div>
+            <%
+                for (Restaurant restaurant : restaurants) {%>
+            <tk:box name="<%=restaurant.getName()%>" category="<%=restaurant.getCategory()%>" 
+            address="<%=restaurant.getAddress()%>" tel="<%=restaurant.getTel()%>"/>
+            <%}
+            %>
         </div>
-
 
         <!-- Scripts -->
         <script src="assets/js/jquery.min.js"></script>
@@ -187,6 +162,40 @@
                     }
                 }
             }
+            
+            function checkAndSelectArea() {
+                var area = document.getElementById("area");
+                var areaOptions = area.getElementsByTagName("*");
+                for (var i = 0; i < areaOptions.length; i++) {
+                    if (areaOptions[i].value == "<%=selectedArea%>")
+                        areaOptions[i].selected = "true";
+                }
+            }
+            
+            function checkAndSelectDistrict() {
+                var district = document.getElementById("district");
+                var districtOptions = district.getElementsByTagName("*");
+                for (var i = 0; i < districtOptions.length; i++) {
+                    if (districtOptions[i].value == "<%=selectedDistrict%>")
+                        districtOptions[i].selected = "true";
+                }
+            }
+            
+            function checkAndSelectSubdistrict() {
+                var subdistrict = document.getElementById("subdistrict");
+                var subdistrictOptions = subdistrict.getElementsByTagName("*");
+                for (var i = 0; i < subdistrictOptions.length; i++) {
+                    if (subdistrictOptions[i].value == "<%=selectedSubdistrict%>")
+                        subdistrictOptions[i].selected = "true";
+                }
+            }
+            <%if (selectedArea != null && !selectedArea.equals("0"))%>
+                checkAndSelectArea();
+            <%if (selectedDistrict != null && !selectedDistrict.equals("0"))%>
+                checkAndSelectDistrict();
+            <%if (selectedSubdistrict != null && !selectedSubdistrict.equals("0"))%>
+                checkAndSelectSubdistrict();
+                
             //handle district select box
             document.getElementById("area").onchange = function () {
                 var district = document.getElementById("district");
@@ -242,8 +251,8 @@
                 var subdistrictOptions = subdistrict.getElementsByTagName("*");
                 var district = trim(this.value);
                 var districtClass;
-                
-                subdistrictOptions[0].selected = "true"; 
+
+                subdistrictOptions[0].selected = "true";
 
                 for (var a = 0, max = districtOptions.length; a < max; a++) {
                     if (district == trim(districtOptions[a].value)) {
