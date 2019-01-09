@@ -68,7 +68,7 @@ public class BoxTag extends SimpleTagSupport {
             JspWriter out = pageContext.getOut();
             out.println("<div class=\"contentbox\">\n"
                     + "<div class=\"boxTitle\">" + name + "</div>"
-                    + "         <a href=\"#\" title=\"" + name + "\n\nCategory: " + category
+                    + "         <a href=\"restaurantDetail?rid=" + rid + "&&name=" + name.replace(" ", "+") + "\" title=\"" + name + "\n\nCategory: " + category
                     + "\n\nAddress: " + address + "\n\nTel: " + tel + "\" rel=\"bookmark\" class=\"thumb-post\">\n");
             StringWriter sw = new StringWriter();
             this.getJspBody().invoke(sw);
