@@ -115,7 +115,9 @@
             String selectedArea = (String) request.getAttribute("area");
             String selectedDistrict = (String) request.getAttribute("district");
             String selectedSubdistrict = (String) request.getAttribute("subdistrict");
-
+            String selectedCategory = (String) request.getAttribute("category");
+            String selectedKeyword = (String) request.getAttribute("keyword");
+            
             if (restaurants == null) {
                 RestaurantDB restaurantDb = new RestaurantDB(dbUrl, dbUser, dbPassword);
                 restaurants = restaurantDb.queryRestaurant();
@@ -189,12 +191,35 @@
                         subdistrictOptions[i].selected = "true";
                 }
             }
+            
+            function checkAndSelectCategory() {
+                var category = document.getElementById("category");
+                var categoryOptions = category.getElementsByTagName("*");
+                for (var i = 0; i < categoryOptions.length; i++) {
+                    if (categoryOptions[i].value == "<%=selectedCategory%>")
+                        categoryOptions[i].selected = "true";
+                }
+            }
+            
+            function checkAndSelectKeyword() {
+                var keyword = document.getElementById("keyword");
+                var keywordOptions = keyword.getElementsByTagName("*");
+                for (var i = 0; i < keywordOptions.length; i++) {
+                    if (keywordOptions[i].value == "<%=selectedKeyword%>")
+                        keywordOptions[i].selected = "true";
+                }
+            }
+            
             <%if (selectedArea != null && !selectedArea.equals("0"))%>
                 checkAndSelectArea();
             <%if (selectedDistrict != null && !selectedDistrict.equals("0"))%>
                 checkAndSelectDistrict();
             <%if (selectedSubdistrict != null && !selectedSubdistrict.equals("0"))%>
                 checkAndSelectSubdistrict();
+            <%if (selectedCategory != null && !selectedCategory.equals("0"))%>
+                checkAndSelectCategory();
+            <%if (selectedKeyword != null && !selectedKeyword.equals("0"))%>
+                checkAndSelectKeyword();
                 
             //handle district select box
             document.getElementById("area").onchange = function () {
