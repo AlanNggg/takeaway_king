@@ -62,6 +62,7 @@ public class RestaurantDB {
         }
         return count;
     }
+    
     public ArrayList<Restaurant> queryRestaurant() {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -105,6 +106,49 @@ public class RestaurantDB {
         return result;
     }
     
+    public Restaurant queryRestaurantById(String rid) {
+        Connection cnnt = null;
+        PreparedStatement pStmnt = null;
+        Restaurant restaurant = null;
+        ArrayList<Restaurant> result = new ArrayList<Restaurant>();
+        try {
+            cnnt = getConnection();
+            String preQueryStatement = "SELECT * FROM RESTAURANT WHERE ID=?";
+            pStmnt = cnnt.prepareStatement(preQueryStatement);
+            pStmnt.setString(1, rid);
+            ResultSet rs = null;
+            rs = pStmnt.executeQuery();
+            if (rs.next()) {
+                restaurant = new Restaurant();
+                restaurant.setId(rs.getInt(1));
+                restaurant.setName(rs.getString(2));
+                restaurant.setCategory(rs.getString(3));
+                restaurant.setTel(rs.getString(4));
+                restaurant.setArea(rs.getString(5));
+                restaurant.setDistrict(rs.getString(6));
+                restaurant.setSubdistrict(rs.getString(7));
+                restaurant.setAddress(rs.getString(8));
+                restaurant.setMonday(rs.getString(9));
+                restaurant.setTuesday(rs.getString(10));
+                restaurant.setWednesday(rs.getString(11));
+                restaurant.setThursday(rs.getString(12));
+                restaurant.setFriday(rs.getString(13));
+                restaurant.setSaturday(rs.getString(14));
+                restaurant.setSunday(rs.getString(15));
+                restaurant.setRate(rs.getInt(16));
+                restaurant.setVisitors(rs.getInt(17));
+                restaurant.setIcon(rs.getString(18));
+            }
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return restaurant;
+    }
     
     public ArrayList<Restaurant> queryRestaurantByCategory(String category) {
         Connection cnnt = null;
