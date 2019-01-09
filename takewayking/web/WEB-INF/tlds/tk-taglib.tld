@@ -69,6 +69,12 @@
         <body-content>scriptless</body-content>
         <info>Generate Menu Box</info>
         <attribute>
+            <name>rid</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>int</type>
+        </attribute>
+        <attribute>
             <name>name</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
