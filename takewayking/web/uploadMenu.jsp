@@ -77,7 +77,7 @@
 
               <div id="result_Imgas"></div>
 
-              <form action="restaurant_detail.jsp" method="get">
+              <form action="restaurantDetail_CMS.jsp" method="get">
                   <input id="rest_id_selected" type="text" id="rid" name="rid">
                   <input id="jump_restaurant_detail"type="submit"/>
               </form> 
@@ -98,7 +98,7 @@
                               //  document.getElementById("uploadBox").style.display = "block";
                               //  document.getElementById("upload_rest_id").value = rsid;
                               
-                  }
+                  }        
                   //handle district select box
                   document.getElementById("areas").onchange = function(){
                           
