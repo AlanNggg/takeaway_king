@@ -6,10 +6,10 @@
 
 <%@page import="takeaway.bean.Menus"%>
 <%@page import="takeaway.db.MenuDB"%>
-<%@page import="java.awt.Menu"%>
 <%@page import="takeaway.bean.Category"%>
 <%@page import="takeaway.db.CategoryDB"%>
 <%@taglib uri="/WEB-INF/tlds/tk-taglib" prefix="tk"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.HashSet"%>
@@ -23,7 +23,7 @@
     private ArrayList<Location> locations = null;
     private ArrayList<Category> categories = null;
     private ArrayList<Restaurant> restaurants = null;
-    private ArrayList<Menu> menus = null;
+    private ArrayList<Menus> menus = null;
 
     private String[] getArea(String[] districts) {
         String[] areas = new String[districts.length];
@@ -120,15 +120,15 @@
     </head>
     <body>
         <%
+            RestaurantDB restaurantDb = new RestaurantDB(dbUrl, dbUser, dbPassword);
             restaurants = (ArrayList<Restaurant>) request.getAttribute("restaurants");
             String selectedArea = (String) request.getAttribute("area");
             String selectedDistrict = (String) request.getAttribute("district");
             String selectedSubdistrict = (String) request.getAttribute("subdistrict");
             String selectedCategory = (String) request.getAttribute("category");
             String selectedKeyword = (String) request.getAttribute("keyword");
-            
+
             if (restaurants == null) {
-                RestaurantDB restaurantDb = new RestaurantDB(dbUrl, dbUser, dbPassword);
                 restaurants = restaurantDb.queryRestaurant();
             }
         %>
@@ -145,20 +145,23 @@
             </form>
         </nav>
         <div class="contentarea">
-            
+
             <%
+                ArrayList<Menus> reMenuList = new ArrayList<Menus>();
+                MenuDB menuDb = new MenuDB(dbUrl, dbUser, dbPassword);
                 for (Restaurant restaurant : restaurants) {
-                    MenuDB menuDb = new MenuDB(dbUrl, dbUser, dbPassword);
-                    ArrayList<Menus> menus = menuDb.queryMenuByRestaurantId(String.valueOf(restaurant.getId()));
-                    Menus menu  = menus.get(0);
-                    request.setAttribute("menu", menu.getMenu());
+                    Menus menu = menuDb.queryOneMenuByRestaurantId(String.valueOf(restaurant.getId()));
+                    reMenuList.add(menu);
+                }
+                request.setAttribute("restaurantList", restaurants);
+                request.setAttribute("reMenuList", reMenuList);
             %>
-            <tk:box name="<%=restaurant.getName()%>" category="<%=restaurant.getCategory()%>" 
-                                 address="<%=restaurant.getAddress()%>" tel="<%=restaurant.getTel()%>">
-                <img class='image_selected_style' src='data:image/png;base64, ${menu}' height='80' width='80'/>"
-            </tk:box>
-            <%}
-            %>
+            <c:forEach var="r" items="${restaurantList}" varStatus="status">
+                <tk:box rid="${restaurantList[status.index].id}" name="${restaurantList[status.index].name}" category="${restaurantList[status.index].category}" 
+                        address="${restaurantList[status.index].address}" tel="${restaurantList[status.index].tel}">
+                    <img class='image_selected_style' src='data:image/png;base64, ${reMenuList[status.index].menu}'/>
+                </tk:box>
+            </c:forEach>
         </div>
 
         <!-- Scripts -->
@@ -181,7 +184,7 @@
                     }
                 }
             }
-            
+
             function checkAndSelectArea() {
                 var area = document.getElementById("area");
                 var areaOptions = area.getElementsByTagName("*");
@@ -190,7 +193,7 @@
                         areaOptions[i].selected = "true";
                 }
             }
-            
+
             function checkAndSelectDistrict() {
                 var district = document.getElementById("district");
                 var districtOptions = district.getElementsByTagName("*");
@@ -199,7 +202,7 @@
                         districtOptions[i].selected = "true";
                 }
             }
-            
+
             function checkAndSelectSubdistrict() {
                 var subdistrict = document.getElementById("subdistrict");
                 var subdistrictOptions = subdistrict.getElementsByTagName("*");
@@ -208,7 +211,7 @@
                         subdistrictOptions[i].selected = "true";
                 }
             }
-            
+
             function checkAndSelectCategory() {
                 var category = document.getElementById("category");
                 var categoryOptions = category.getElementsByTagName("*");
@@ -217,7 +220,7 @@
                         categoryOptions[i].selected = "true";
                 }
             }
-            
+
             function checkAndSelectKeyword() {
                 var keyword = document.getElementById("keyword");
                 var keywordOptions = keyword.getElementsByTagName("*");
@@ -226,18 +229,18 @@
                         keywordOptions[i].selected = "true";
                 }
             }
-            
+
             <%if (selectedArea != null && !selectedArea.equals("0"))%>
-                checkAndSelectArea();
+            checkAndSelectArea();
             <%if (selectedDistrict != null && !selectedDistrict.equals("0"))%>
-                checkAndSelectDistrict();
+            checkAndSelectDistrict();
             <%if (selectedSubdistrict != null && !selectedSubdistrict.equals("0"))%>
-                checkAndSelectSubdistrict();
+            checkAndSelectSubdistrict();
             <%if (selectedCategory != null && !selectedCategory.equals("0"))%>
-                checkAndSelectCategory();
+            checkAndSelectCategory();
             <%if (selectedKeyword != null && !selectedKeyword.equals("0"))%>
-                checkAndSelectKeyword();
-                
+            checkAndSelectKeyword();
+
             //handle district select box
             document.getElementById("area").onchange = function () {
                 var district = document.getElementById("district");
