@@ -59,7 +59,7 @@
 <section id="banner" class="bg-img" data-bg="bg.jpg">
     <div class="inner">
         <header>
-            <h1>This is Road Trip</h1>
+            <h1>Welcome to Takeaway King!</h1>
         </header>
     </div>
     <a href="#one" class="more">Learn More</a>
