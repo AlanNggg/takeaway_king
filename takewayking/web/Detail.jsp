@@ -4,6 +4,8 @@
     Author     : user
 --%>
 
+<%@page import="takeaway.bean.Menus"%>
+<%@page import="takeaway.db.MenuDB"%>
 <%@page import="java.awt.Menu"%>
 <%@page import="takeaway.bean.Category"%>
 <%@page import="takeaway.db.CategoryDB"%>
@@ -84,13 +86,20 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
         <style>
             .contentbox {  
-                width: 225px;
-                height: 145px;
+                width: 255px;
+                height: 175px;
                 margin: 10px;
                 float: left;
                 overflow: hidden;
                 text-align: left;
                 border-radius: 15px;
+                text-align: center;
+            }
+            .boxTitle {
+                font-weight: bold;
+                color: white;
+                font-size: 20px;
+                background-color: rgb(255, 153, 0);
             }
             .contentbox img {
                 width: 100%;
@@ -136,10 +145,18 @@
             </form>
         </nav>
         <div class="contentarea">
+            
             <%
-                for (Restaurant restaurant : restaurants) {%>
+                for (Restaurant restaurant : restaurants) {
+                    MenuDB menuDb = new MenuDB(dbUrl, dbUser, dbPassword);
+                    ArrayList<Menus> menus = menuDb.queryMenuByRestaurantId(String.valueOf(restaurant.getId()));
+                    Menus menu  = menus.get(0);
+                    request.setAttribute("menu", menu.getMenu());
+            %>
             <tk:box name="<%=restaurant.getName()%>" category="<%=restaurant.getCategory()%>" 
-            address="<%=restaurant.getAddress()%>" tel="<%=restaurant.getTel()%>"/>
+                                 address="<%=restaurant.getAddress()%>" tel="<%=restaurant.getTel()%>">
+                <img class='image_selected_style' src='data:image/png;base64, ${menu}' height='80' width='80'/>"
+            </tk:box>
             <%}
             %>
         </div>
