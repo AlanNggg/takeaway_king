@@ -10,9 +10,17 @@ package takeaway.bean;
  * @author user
  */
 public class Restaurant {
-    private String name, category, tel, 
+    private String name, category, tel, icon, 
             area, district, subdistrict, address, //  
             monday, tuesday, wednesday, thursday, friday, saturday, sunday;
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
     private int id, rate, visitors;
     public String getName() {
         return name;
