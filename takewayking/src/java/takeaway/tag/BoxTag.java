@@ -19,7 +19,16 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 public class BoxTag extends SimpleTagSupport {
 
     private String name, category, address, tel;
+    private String rid;
 
+    public String getRid() {
+        return rid;
+    }
+
+    public void setRid(String rid) {
+        this.rid = rid;
+    }
+    
     public String getName() {
         return name;
     }
