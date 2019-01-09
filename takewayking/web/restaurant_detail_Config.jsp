@@ -10,7 +10,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        <!-- UIkit CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.26/css/uikit.min.css" />
 
+        <!-- UIkit JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.26/js/uikit.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.26/js/uikit-icons.min.js"></script>
         <style>
             .image_selected_style{
                     float:left;
@@ -39,7 +44,7 @@
                               out.print("<p>Telephone: " + rest.getTel() + "</p>");
                               out.print("<p>Area: " + rest.getArea() + " "+ rest.getDistrict() + " " +rest.getSubdistrict() + "</p>");
                               out.print("<p>Address: " +  rest.getAddress() + "</p>");
-                              out.print("<p>Total Visitor " +  rest.getVisitors()+ "</p>");
+                              out.print("<p>Total Visitor <span class='uk-badge'>" +  rest.getVisitors()+ "</span></p>");
                            
                           %>
                 </fieldset>
@@ -124,12 +129,12 @@
                                     reader.readAsDataURL(file);
                                 });
                             }
-   
+                
                 document.getElementById("upload_Image").addEventListener('change',function(event){
                                     
-                                    if(hadMenus.length == 4){
-                                                console.log("Allow Restaurant have 5 menus");
-                                                console.log(event);
+                                    if(hadMenus.length > 5){
+                                                alert("Not more 5 menus with each Restaurant ");
+                                                this.files = null;
                                                 return;
                                     }
                                            

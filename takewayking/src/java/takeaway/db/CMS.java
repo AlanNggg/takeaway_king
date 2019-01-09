@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import takeaway.bean.Menus;
 import takeaway.bean.Restaurant;
+import takeaway.bean.RestaurantOwner;
 import takeaway.bean.User;
 import takeaway.db.UserDB;
 
@@ -275,6 +276,38 @@ public class CMS extends UserDB {
                 m.setDatetime(rs.getString("datetime"));
                 m.setRate(rs.getString("rate"));
                 result.add(m);
+           }
+           pStmnt.close();
+           cnnt.close();
+       } catch (SQLException ex) {
+           while (ex != null) {
+               ex.printStackTrace();
+               ex = ex.getNextException();
+           }
+       } catch (IOException ex) {
+           ex.printStackTrace();
+       } 
+       return result;
+   }
+   public ArrayList<RestaurantOwner> getRestOwnerByRid(String rid){
+        Connection cnnt = null;
+       PreparedStatement pStmnt = null;
+       User user = null;
+       ArrayList<RestaurantOwner> result = new ArrayList<RestaurantOwner>();
+       try {
+           cnnt = getConnection();
+           String preQueryStatement = "SELECT * FROM restaurant_owner_connections,restaurant_owner WHERE restaurant_owner_connections.owner_email = restaurant_owner.email and restaurant_owner_connections.restaurant_id = ?";
+           pStmnt = cnnt.prepareStatement(preQueryStatement);
+           pStmnt.setString(1, rid);
+            ResultSet rs = null;
+           rs = pStmnt.executeQuery();
+           while (rs.next()) {
+               RestaurantOwner rest = new RestaurantOwner();
+               rest.setEmail(rs.getString("email"));
+               rest.setName(rs.getString("name"));
+               rest.setPassword(rs.getString("password"));
+               result.add(rest);
+               
            }
            pStmnt.close();
            cnnt.close();
