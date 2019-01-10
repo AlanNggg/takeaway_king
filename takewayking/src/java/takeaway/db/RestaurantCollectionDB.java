@@ -69,6 +69,35 @@ public class RestaurantCollectionDB {
         }
         return result;
     }
+    
+    public RestaurantCollections queryReCollectionByEmailAndRid(String email, String rid) {
+        Connection cnnt = null;
+        PreparedStatement pStmnt = null;
+        RestaurantCollections restaurant = null;
+        try {
+            cnnt = getConnection();
+            String preQueryStatement = "SELECT * FROM RESTAURANT_COLLECTIONS WHERE USER_EMAIL=? AND RESTAURANT_ID=?";
+            pStmnt = cnnt.prepareStatement(preQueryStatement);
+            pStmnt.setString(1, email);
+            pStmnt.setString(2, rid);
+            ResultSet rs = null;
+            rs = pStmnt.executeQuery();
+            System.out.print(rs);
+            if (rs.next()) {
+                restaurant = new RestaurantCollections();
+                restaurant.setUser_email(rs.getString(1));
+                restaurant.setRestaurant_id(rs.getString(2));
+            }
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return restaurant;
+    }
 
     public boolean addReCollection(String email, String rid) {
         Connection cnnt = null;
@@ -77,6 +106,33 @@ public class RestaurantCollectionDB {
         try {
             cnnt = getConnection();
             String preQueryStatement = "INSERT INTO RESTAURANT_COLLECTIONS VALUE (?, ?)";
+            pStmnt = cnnt.prepareStatement(preQueryStatement);
+            pStmnt.setString(1, email);
+            pStmnt.setString(2, rid);
+            int rowCount = pStmnt.executeUpdate();
+            if (rowCount >= 1) {
+                isSuccess = true;
+            }
+            pStmnt.close();
+            cnnt.close();
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return isSuccess;
+    }
+    
+    public boolean delReCollection(String email, String rid) {
+        Connection cnnt = null;
+        PreparedStatement pStmnt = null;
+        boolean isSuccess = false;
+        try {
+            cnnt = getConnection();
+            String preQueryStatement = "DELETE FROM RESTAURANT_COLLECTIONS WHERE USER_EMAIL=? AND RESTAURANT_ID=?";
             pStmnt = cnnt.prepareStatement(preQueryStatement);
             pStmnt.setString(1, email);
             pStmnt.setString(2, rid);
