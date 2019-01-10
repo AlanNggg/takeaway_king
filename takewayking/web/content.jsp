@@ -55,7 +55,24 @@
     String[] areas = areasSet.toArray(new String[areasSet.size()]);
     String[] districts = districtsSet.toArray(new String[districtsSet.size()]);
     String[] subdistricts = subdistrictsSet.toArray(new String[subdistrictsSet.size()]);
+    
+    ArrayList<Restaurant> highRateRestaurant = new ArrayList<Restaurant>();
+    RestaurantDB restaurantDb = new RestaurantDB(dbUrl, dbUser, dbPassword);
+    for (int i = 0; i < areas.length; i++) {
+        if (restaurantDb.queryOneRestaurantByAreaAndRate(areas[i]) != null) {
+            highRateRestaurant.add(restaurantDb.queryOneRestaurantByAreaAndRate(areas[i]));
+        } else {
+            Restaurant restaurant = new Restaurant();
+            restaurant.setId(0);
+            restaurant.setName("Demo Restaurant");
+            restaurant.setArea(areas[i]);
+            restaurant.setCategory("chinese");
+            restaurant.setAddress("There is no restaurant in this area");
+            highRateRestaurant.add(restaurant);
+        }
+    }
 %>
+<p><%=highRateRestaurant.size()%></p>
 <section id="banner" class="bg-img" data-bg="bg.jpg">
     <div class="inner">
         <header>
@@ -67,7 +84,8 @@
 
 <%
     for (int i = 0; i < areas.length; i++) {%>
-    <tk:content area="<%=areas[i]%>" numOfContent="<%=i%>"/>
+        <tk:content area="<%=areas[i]%>" numOfContent="<%=i%>" rid="<%=highRateRestaurant.get(i).getId()%>" 
+        name="<%=highRateRestaurant.get(i).getName()%>" address="<%=highRateRestaurant.get(i).getAddress()%>" category="<%=highRateRestaurant.get(i).getCategory()%>"/>
 <%}
 %>
 
