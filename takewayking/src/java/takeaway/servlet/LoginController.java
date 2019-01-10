@@ -98,7 +98,7 @@ public class LoginController extends HttpServlet {
             User user = db.getUser(email, password);
             
             session.setAttribute("user", user);
-            targetURL = "welcome.jsp";
+            targetURL = "main.jsp";
         } else {
             request.setAttribute("isValid", isValid);
             request.setAttribute("url", db.getDbUrl());
