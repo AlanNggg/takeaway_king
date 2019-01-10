@@ -10,7 +10,15 @@ package takeaway.bean;
  * @author user
  */
 public class Comment {
-    private String user_email, restaurant_id, comment, datetime;
+    private String user_email, restaurant_id, comment, datetime, id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getUser_email() {
         return user_email;
