@@ -18,12 +18,29 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 public class ContentTag extends SimpleTagSupport {
 
     private String area;
-    private String name = "abc restaurant", address;
+    private String name, address, category;
+    private int rid;
     private String[] numOfContents = {"one", "two", "three"};
     private int numOfContent;
 
     public String getName() {
         return name;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public int getRid() {
+        return rid;
+    }
+
+    public void setRid(int rid) {
+        this.rid = rid;
     }
 
     public void setName(String name) {
@@ -73,15 +90,22 @@ public class ContentTag extends SimpleTagSupport {
                     + "            <hr style=\"margin: 1.4rem 0;\">\n"
                     + "            <div class=\"content\">\n"
                     + "                <h2>" + name + "</h2>\n"
+                    + "                <h3 style='display: flex; align-items: start;'>" + "Category : " + category + "</h3>\n"
+                    + "                <h3 style='display: flex; align-items: start;'>" + "Address : " + address + "</h3>\n"       
                     + "                <p>Scelerisque enim mi curae erat ultricies lobortis donec velit in per cum consectetur purus a enim platea vestibulum lacinia et elit ante scelerisque vestibulum. At urna condimentum sed vulputate a duis in senectus ullamcorper lacus cubilia consectetur odio proin sociosqu a parturient nam ac blandit praesent aptent. Eros dignissim mus mauris a natoque ad suspendisse nulla a urna in tincidunt tristique enim arcu litora scelerisque eros suspendisse.</p>\n"
                     + "            </div>\n"
                     + "            <footer>\n"
-                    + "                <a href=\"generic.html\" class=\"button alt\">More Detail</a>\n"
-                    + "            </footer>\n"
+                    + "                <a href=\"");
+            if (rid != 0) {
+                out.println("restaurantDetail?rid=" + rid + "&&name=" + name.replace(" ", "+") + "\" class=\"button alt\">More Detail</a>\n");
+            } else {
+                out.println("main.jsp\" class=\"button alt\">More Detail</a>\n");
+            }
+            out.println("            </footer>\n"
                     + "        </article>\n"
                     + "    </div>\n");
             if (nextNumOfContent < numOfContents.length) {
-                out.println("<a href=\"#"  + numOfContents[nextNumOfContent] + "\" class=\"more\">Learn More</a>\n");
+                out.println("<a href=\"#" + numOfContents[nextNumOfContent] + "\" class=\"more\">Learn More</a>\n");
             }
             out.println("</section>");
         } catch (IOException e) {
