@@ -22,40 +22,64 @@
         <link rel="stylesheet" href="./CMS/css/style.css">
         <!-- endinject -->
         <link rel="shortcut icon" href="./CMS/images/favicon.png" />
+        <style>
+            .message-box{
+                display: none;
+                margin: 0px 0px 30px 0px;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                background: white;
+            }
+
+            .message-box-error{
+                background: #dd4848;
+            }
+            .message-box-alert{
+                background: #ddd348;
+            }
+        </style>
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     </head>
     <body>
-        <%
-            if (request.getAttribute("isValid") != null) {
-                boolean isValid = ((Boolean) request.getAttribute("isValid")).booleanValue();
-                if (!isValid) {
-                    out.println("NO");
-                    out.println(request.getAttribute("url").toString());
-                    out.println(request.getAttribute("user").toString());
-                    out.println(request.getAttribute("password").toString());
-                } else {
-                    out.println("yes");
-                }
-            };
-        %>
+
+
+
         <div class="container-scroller">
             <div class="container-fluid page-body-wrapper full-page-wrapper">
                 <div class="content-wrapper d-flex align-items-center auth">
+
                     <div class="row w-100">
                         <div class="col-lg-4 mx-auto">
                             <div class="auth-form-light text-left p-5">
-
+                                <div class="message-box"></div>
+                                <%
+                                    if (request.getAttribute("isValid") != null) {
+                                        boolean isValid = ((Boolean) request.getAttribute("isValid")).booleanValue();
+                                        if (!isValid) {%>
+                                <script>
+                                    $(".message-box").addClass("message-box-error")
+                                            .removeClass("message-box-alert")
+                                            .text("Your email or password is incorrect ")
+                                            .show(300)
+                                            .delay(2000)
+                                            .hide(300);
+                                </script>
+                                <% }
+                                    };
+                                %>
                                 <h4>Hello! let's get started</h4>
 
                                 <form id="login" class="pt-3" method="post" action="login">
                                     <input type="hidden" name="action" value="login"/>
                                     <div class="form-group">
-                                        <input type="email" class="form-control form-control-lg" id="exampleInputEmail1" name="email" placeholder="Email">
+                                        <input type="email" class="form-control form-control-lg" id="exampleInputEmail1" name="email" placeholder="Email" required>
                                     </div>
                                     <div class="form-group">
-                                        <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" name="password" placeholder="Password">
+                                        <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" name="password" placeholder="Password" required>
                                     </div>
                                     <div class="mt-3">
-                                        <a class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn" onclick="document.getElementById('login').submit()">SIGN IN</a>
+                                        <input class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn" type="submit" value="SIGN IN"/>
                                     </div>
                                     <div class="my-2 d-flex justify-content-between align-items-center">
                                         <div class="form-check">
@@ -68,7 +92,7 @@
                                     </div>
 
                                     <div class="text-center mt-4 font-weight-light">
-                                        Don't have an account? <a href="register.html" class="text-primary">Create</a>
+                                        Don't have an account? <a href="Register.jsp" class="text-primary">Create</a>
                                     </div>
                                 </form>
                             </div>

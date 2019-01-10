@@ -7,6 +7,7 @@
 <nav id="menu">
     <ul class="links">
         <li><a href="main.jsp">Home</a></li>
+        <li><a href="Info.jsp">Personal Info</a></li>
         <li><a href="Detail.jsp">Search</a></li>
         <li><a href="Favourite.jsp">Your Favourite</a></li>
     </ul>

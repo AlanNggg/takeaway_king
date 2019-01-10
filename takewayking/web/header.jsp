@@ -63,4 +63,7 @@
             <i class="fas fa-sign-in-alt" style="color: white;"></i>
         </a>
     </div>
+    <form method="post" action="login">
+        <input type="hidden" name="action" value="logout"/>
+    </form>
 </header>
