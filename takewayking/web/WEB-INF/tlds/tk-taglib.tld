@@ -9,6 +9,12 @@
         <body-content>empty</body-content>
         <info>Generate Content Paragraph</info>
         <attribute>
+            <name>rid</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>int</type>
+        </attribute>
+        <attribute>
             <name>area</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
@@ -16,13 +22,19 @@
         </attribute>
         <attribute>
             <name>name</name>
-            <required>false</required>
+            <required>true</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
             <name>address</name>
-            <required>false</required>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>category</name>
+            <required>true</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
