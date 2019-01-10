@@ -6,8 +6,8 @@
 
 <nav id="menu">
     <ul class="links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="generic.html">Generic</a></li>
-        <li><a href="elements.html">Elements</a></li>
+        <li><a href="main.jsp">Home</a></li>
+        <li><a href="Detail.jsp">Search</a></li>
+        <li><a href="Favourite.jsp">Your Favourite</a></li>
     </ul>
 </nav>

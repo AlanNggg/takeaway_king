@@ -133,6 +133,7 @@
             }
         %>
         <jsp:include page="header.jsp"/>
+        <jsp:include page="menu.jsp"/>
         <nav style="position: relative; top: 80px; background-color: rgba(90, 90, 90, 0.7);  padding: 0 1.5em; display: flex; align-items: center; height: 80px;">
             <form method="get" action="search" style="position: relative; display: flex; align-items: center; float: right; width: 100%; height: 100%; margin: 0px;">
                 <tk:selector options="<%=areas%>" name="area"/>
