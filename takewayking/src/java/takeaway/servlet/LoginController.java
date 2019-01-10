@@ -33,7 +33,6 @@ public class LoginController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -60,12 +59,14 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String action = request.getParameter("action");
         if (action.equals("login")) {
-           doAuthenticate(request, response);
+            doAuthenticate(request, response);
         } else if (action.equals("logout")) {
             doLogout(request, response);
+        } else if (action.equals("register")) {
+            doSignUp(request, response);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
         }
@@ -80,23 +81,23 @@ public class LoginController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
+
     private UserDB db;
-    
-    private void doAuthenticate(HttpServletRequest request, HttpServletResponse response) 
+
+    private void doAuthenticate(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        
+
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        
+
         String targetURL;
-        
+
         boolean isValid = db.isValidUser(email, password);
-        
+
         if (isValid) {
             HttpSession session = request.getSession(true);
             User user = db.getUser(email, password);
-            
+
             session.setAttribute("user", user);
             targetURL = "main.jsp";
         } else {
@@ -110,7 +111,7 @@ public class LoginController extends HttpServlet {
         rd = getServletContext().getRequestDispatcher("/" + targetURL);
         rd.forward(request, response);
     }
-    
+
     private void doLogin(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         String targetURL = "login.jsp";
@@ -118,8 +119,8 @@ public class LoginController extends HttpServlet {
         rd = getServletContext().getRequestDispatcher("/" + targetURL);
         rd.forward(request, response);
     }
-    
-    private void doLogout(HttpServletRequest request, HttpServletResponse response) 
+
+    private void doLogout(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         HttpSession session = request.getSession(false);
         if (session != null) {
@@ -130,7 +131,29 @@ public class LoginController extends HttpServlet {
         rd = getServletContext().getRequestDispatcher("/main.jsp");
         rd.forward(request, response);
     }
-    
+
+    private void doSignUp(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        boolean isSuccess = addUser(request, response);
+        if (isSuccess) {
+            RequestDispatcher rd;
+            rd = getServletContext().getRequestDispatcher("/login.jsp");
+            rd.forward(request, response);
+        } else {
+            request.setAttribute("isSuccess", isSuccess);
+            RequestDispatcher rd;
+            rd = getServletContext().getRequestDispatcher("/Register.jsp");
+            rd.forward(request, response);
+        }
+    }
+
+    private boolean addUser(HttpServletRequest request, HttpServletResponse response) {
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String name = request.getParameter("name");
+        return db.addUser(email, name, password);
+    }
+
     @Override
     public void init() {
         String dbUser = this.getServletContext().getInitParameter("dbUser");
