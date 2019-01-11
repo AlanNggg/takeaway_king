@@ -23,6 +23,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.codec.binary.Base64;
+import takeaway.bean.Restaurant;
 import takeaway.db.CMS;
 
  
@@ -31,7 +32,7 @@ import takeaway.db.CMS;
  *
  * @author TerryFungPC
  */
-@WebServlet(name = "upLoadMenuImage", urlPatterns = {"/upLoadMenuImage"})
+@WebServlet(urlPatterns = {"/upLoadMenuImage"})
 public class upLoadMenuImage extends HttpServlet {
    private static final long serialVersionUID = 1L;
     private String defaultPath = "C:";
@@ -91,11 +92,12 @@ public class upLoadMenuImage extends HttpServlet {
         if (!uploadDir.exists()) {
             uploadDir.mkdir();
         }
-
+        Restaurant rest =new Restaurant();
         try {
             // parses the request's content to extract file data
             @SuppressWarnings("unchecked")
             List<FileItem> formItems = upload.parseRequest(request);
+          
             String base64 =null;
              String  name =null;
               String value = null;
@@ -103,17 +105,39 @@ public class upLoadMenuImage extends HttpServlet {
 
                   for (FileItem field : formItems) {    //1.find the restaurant id first
                         if (field.isFormField()) {
-
-                              name = field.getFieldName();
-
-                             value = field.getString();
-
-                            request.setAttribute("rid", value);
-                            System.out.println("You are insert menu to Restaurant ID: "+value);
+                                  switch(field.getFieldName()){
+                                       case "form_rest_id":rest.setId(Integer.parseInt(field.getString()));
+                                        break;
+                                      case "form_rest_name":rest.setName(field.getString());
+                                        break;
+                                      case "form_category_name":rest.setCategory(field.getString());
+                                      break;
+                                      case "form_rest_tel":rest.setTel(field.getString());
+                                      break;
+                                      case "areas":rest.setArea(field.getString());
+                                      break;
+                                      case "districts":rest.setDistrict(field.getString());
+                                      break;
+                                      case "subdistricts":rest.setSubdistrict(field.getString());
+                                      break;
+                                      case "form_rest_location":rest.setAddress(field.getString());
+                                      break;
+                                      default:
+                                          break;
+                                  
+                                  }
+//                              name = field.getFieldName();
+//
+//                             value = field.getString();
+//
+//                            request.setAttribute("rid", value);
+                            System.out.println("You are insert menu to Restaurant ID: "+ field.getFieldName());
 
                          }
                  }
-                  
+                    CMS msc = new CMS();
+                        msc.saveRestToDB(rest);
+                 
                   //2.find the file of image
                 for (FileItem item : formItems) {
                     // processes only fields that are not form fields
@@ -135,8 +159,8 @@ public class upLoadMenuImage extends HttpServlet {
                         //System.out.println(base64);
                         
                         //5.Save image to DB
-                         CMS msc = new CMS();
-                        msc.saveMenuToDB(value, base64);
+                        msc = new CMS();
+                        msc.saveMenuToDB(rest.getId()+"", base64);
 
                     //java.nio.file.Files.delete(Paths.get(filePath));
                    
@@ -160,10 +184,13 @@ public class upLoadMenuImage extends HttpServlet {
 		}
 		//now directory is empty, so we can delete it
 		System.out.println("Deleting Directory. Success = "+dir.delete());
-                    //  PrintWriter out = response.getWriter();
+                  request.setAttribute("rid", rest.getId());
+               
+                String targetURL = "restaurantDetail_CMS.jsp";
+                          //  PrintWriter out = response.getWriter();
                       // response.setContentType("text/html");
                     //  out.print("<img src='data:image/png;base64, " + msc.getMenusByRid(value)+"'/>");
-               getServletContext().getRequestDispatcher("/restaurant_detail_Config.jsp?rid="+value).forward(
+               getServletContext().getRequestDispatcher("/"+targetURL).forward(
                request, response);
             }
         } catch (Exception ex) {
@@ -171,7 +198,8 @@ public class upLoadMenuImage extends HttpServlet {
                     "There was an error: " + ex.getMessage());
         }
         // redirects client to message page
-      
+      getServletContext().getRequestDispatcher("/restaurantDetail_CMS.jsp?rid="+rest.getId()).forward(
+               request, response);
     }
     
     private static String encodeFileToBase64Binary(File file){
