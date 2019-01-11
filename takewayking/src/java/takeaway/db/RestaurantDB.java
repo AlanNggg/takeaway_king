@@ -39,7 +39,7 @@ public class RestaurantDB {
         }
         return null;
     }
-    
+
     public int queryCountRow() {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -62,7 +62,35 @@ public class RestaurantDB {
         }
         return count;
     }
-    
+
+    public boolean updateVisitor(String count, String rid) {
+        Connection cnnt = null;
+        PreparedStatement pStmnt = null;
+        boolean isSuccess = false;
+        try {
+            cnnt = getConnection();
+            String preQueryStatement = "";
+            preQueryStatement = "UPDATE RESTAURANT SET VISITORS=? WHERE ID=?";
+            pStmnt = cnnt.prepareStatement(preQueryStatement);
+            pStmnt.setString(1, count);
+            pStmnt.setString(2, rid);
+            int rowCount = pStmnt.executeUpdate();
+            if (rowCount >= 1) {
+                isSuccess = true;
+            }
+            pStmnt.close();
+            cnnt.close();
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return isSuccess;
+    }
+
     public ArrayList<Restaurant> queryRestaurant() {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -105,7 +133,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
     public Restaurant queryRestaurantById(String rid) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -149,7 +177,7 @@ public class RestaurantDB {
         }
         return restaurant;
     }
-    
+
     public ArrayList<Restaurant> queryRestaurantByCategory(String category) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -193,7 +221,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
     public ArrayList<Restaurant> queryRestaurantByName(String name) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -238,7 +266,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
     public ArrayList<Restaurant> queryRestaurantByAddress(String address) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -283,7 +311,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
     public ArrayList<Restaurant> queryRestaurantByKeyword(String keyword, String query) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -329,7 +357,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
     public ArrayList<Restaurant> queryRestaurantByArea(String area) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -462,8 +490,6 @@ public class RestaurantDB {
         return result;
     }
 
-    
-    
     public ArrayList<Restaurant> queryRestaurantByAreaAndCategory(String area, String category) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -508,7 +534,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
     public ArrayList<Restaurant> queryRestaurantByDistrictAndCategory(String district, String category) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -553,7 +579,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
     public ArrayList<Restaurant> queryRestaurantBySubdistrictAndCategory(String subdistrict, String category) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -598,9 +624,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
-    
-    
+
     public ArrayList<Restaurant> queryRestaurantByAreaAndKeyword(String area, String keyword, String query) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -647,7 +671,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
     public ArrayList<Restaurant> queryRestaurantByDistrictAndKeyword(String district, String keyword, String query) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -694,7 +718,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
     public ArrayList<Restaurant> queryRestaurantBySubdistrictAndKeyword(String subdistrict, String keyword, String query) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -740,8 +764,6 @@ public class RestaurantDB {
         }
         return result;
     }
-    
-    
 
     public ArrayList<Restaurant> queryRestaurantByAreaAndCategoryAndKeyword(String area, String category, String keyword, String query) {
         Connection cnnt = null;
@@ -790,7 +812,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
     public ArrayList<Restaurant> queryRestaurantByDistrictAndCategoryAndKeyword(String district, String category, String keyword, String query) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -838,7 +860,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
     public ArrayList<Restaurant> queryRestaurantBySubdistrictAndCategoryAndKeyword(String subdistrict, String category, String keyword, String query) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -886,9 +908,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
-    
-    
+
     public ArrayList<Restaurant> queryRestaurantByCategoryAndKeyword(String category, String keyword, String query) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -934,7 +954,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
     public Restaurant queryOneRestaurantByAreaAndRate(String area) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -976,7 +996,7 @@ public class RestaurantDB {
         }
         return restaurant;
     }
-    
+
     public ArrayList<Restaurant> queryRestaurantByAreaAndRate(String area) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -1020,7 +1040,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
     public ArrayList<Restaurant> queryRestaurantByDistrictAndRate(String district) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -1064,7 +1084,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
     public ArrayList<Restaurant> queryRestaurantBySubdistrictAndRate(String district) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -1108,7 +1128,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
     public ArrayList<Restaurant> queryRestaurantByVisitor() {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -1151,7 +1171,7 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
     public ArrayList<Restaurant> queryRestaurantByRate() {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -1194,5 +1214,5 @@ public class RestaurantDB {
         }
         return result;
     }
-    
+
 }
