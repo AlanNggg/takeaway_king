@@ -4,6 +4,7 @@
     Author     : user
 --%>
 
+<%@page import="takeaway.db.RestaurantDB"%>
 <%@page import="takeaway.bean.MenuCollections"%>
 <%@page import="takeaway.bean.RestaurantCollections"%>
 <%@page import="takeaway.db.MenuCollectionDB"%>
@@ -77,13 +78,14 @@
     </head>
     <body>
         <%
+            
             Restaurant restaurant = (Restaurant) request.getAttribute("restaurant");
             ArrayList<Menus> menus = (ArrayList<Menus>) request.getAttribute("menus");
 
             String dbUser = this.getServletContext().getInitParameter("dbUser");
             String dbPassword = this.getServletContext().getInitParameter("dbPassword");
             String dbUrl = this.getServletContext().getInitParameter("dbUrl");
-
+            
             if (request.getAttribute("comments") == null) {
                 CommentDB commentDb = new CommentDB(dbUrl, dbUser, dbPassword);
                 ArrayList<Comment> comments = commentDb.queryCommentByRestauratId(String.valueOf(restaurant.getId()));
@@ -98,11 +100,22 @@
                 users.add(userWithComment);
             }
             request.setAttribute("users", users);
+
+            RestaurantDB reDb = new RestaurantDB(dbUrl, dbUser, dbPassword);
+            
+            Integer hitsCount = (Integer) application.getAttribute("hitCounter");
+            if (hitsCount == null || hitsCount == 0) {
+                hitsCount = 1;
+            } else {
+                hitsCount += 1;
+            }
+            reDb.updateVisitor(String.valueOf(hitsCount), String.valueOf(restaurant.getId()));
+            application.setAttribute("hitCounter", hitsCount);
         %>
         <jsp:useBean id="user" class="takeaway.bean.User" scope="session"/>
         <jsp:include page="header.jsp"/>
         <jsp:include page="menu.jsp"/>
-        <%
+        <%            
             RestaurantCollectionDB recDb = new RestaurantCollectionDB(dbUrl, dbUser, dbPassword);
             MenuCollectionDB mecDb = new MenuCollectionDB(dbUrl, dbUser, dbPassword);
             RestaurantCollections rec = recDb.queryReCollectionByEmailAndRid(user.getEmail(), String.valueOf(restaurant.getId()));
