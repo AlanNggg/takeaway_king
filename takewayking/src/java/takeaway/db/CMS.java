@@ -143,6 +143,36 @@ public ArrayList<String> getAllDist(String area){
        } 
        return result;
    }
+ public ArrayList<User> getAllUser(){
+        Connection cnnt = null;
+       PreparedStatement pStmnt = null;
+   ;
+       ArrayList<User> result = new ArrayList<User>();
+       try {
+           cnnt = getConnection();
+           String preQueryStatement = "SELECT * FROM user";
+           pStmnt = cnnt.prepareStatement(preQueryStatement);
+           ResultSet rs = null;
+           rs = pStmnt.executeQuery();
+           while (rs.next()) {
+               User user = new User();
+               user.setEmail(rs.getString(1));
+               user.setName(rs.getString(2));
+               user.setEmail(rs.getString(3));
+               result.add(user);
+           }
+           pStmnt.close();
+           cnnt.close();
+       } catch (SQLException ex) {
+           while (ex != null) {
+               ex.printStackTrace();
+               ex = ex.getNextException();
+           }
+       } catch (IOException ex) {
+           ex.printStackTrace();
+       } 
+       return result;
+   }
     public ArrayList<String> getAllRestaurantID(){
         Connection cnnt = null;
        PreparedStatement pStmnt = null;
@@ -355,6 +385,33 @@ public ArrayList<String> getAllDist(String area){
           }else{
               return false;
           }
+   }  
+   public boolean saveOwnerRectToDB(String email,String id){
+          int flag = 0;
+          Connection cnnt = null;
+         Statement stmnt = null;
+        try {
+            cnnt = getConnection();
+          stmnt = cnnt.createStatement();
+            String sql = "INSERT INTO restaurant_owner_connections VALUES ( '"+email+"' , '" + id+"' )";
+            flag = stmnt.executeUpdate(sql);
+            stmnt.close();
+           cnnt.close();
+         
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+         if(flag == 1){
+              return true;
+          }else{
+              return false;
+          }
    }
     public boolean saveLogToDB(String res,String nonRest,String own,String date){
           int flag = 0;
@@ -364,6 +421,35 @@ public ArrayList<String> getAllDist(String area){
             cnnt = getConnection();
           stmnt = cnnt.createStatement();
             String sql = "INSERT INTO log VALUES ( '"+date+"' , '" + res+"' , '" + nonRest+"', '" + own+"' )";
+            flag = stmnt.executeUpdate(sql);
+            stmnt.close();
+           cnnt.close();
+         
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+         if(flag == 1){
+              return true;
+          }else{
+              return false;
+          }
+   }
+    
+     public boolean deleteOwnToDB(String email,String rid){
+          int flag = 0;
+          Connection cnnt = null;
+         Statement stmnt = null;
+        try {
+            cnnt = getConnection();
+          stmnt = cnnt.createStatement();
+            String sql = "delete from restaurant_owner_connections"
+                    + " where owner_email = '"+email+"' and restaurant_id = '"+rid+"'";
             flag = stmnt.executeUpdate(sql);
             stmnt.close();
            cnnt.close();
@@ -400,6 +486,74 @@ public ArrayList<String> getAllDist(String area){
                menu.setRegister(rs.getString(2));
                menu.setNonRegister(rs.getString(3));
                menu.setOwner(rs.getString(4));
+               result.add(menu);
+           }
+           pStmnt.close();
+           cnnt.close();
+       } catch (SQLException ex) {
+           while (ex != null) {
+               ex.printStackTrace();
+               ex = ex.getNextException();
+           }
+       } catch (IOException ex) {
+           ex.printStackTrace();
+       } 
+       System.out.println(result.size());
+       return result;
+   }
+     public ArrayList<RestaurantOwner> getRestOwnByRid(String rid){
+         Connection cnnt = null;
+       PreparedStatement pStmnt = null;
+       RestaurantOwner menu = null;
+      ArrayList<RestaurantOwner> result = new ArrayList<RestaurantOwner>();
+       try {
+           cnnt = getConnection();
+           String preQueryStatement = "SELECT * FROM restaurant_owner,restaurant_owner_connections"
+                   + " where restaurant_owner.email = restaurant_owner_connections.owner_email "
+                   + "AND restaurant_owner_connections.restaurant_id = ? ";
+           pStmnt = cnnt.prepareStatement(preQueryStatement);
+           pStmnt.setString(1, rid);
+            ResultSet rs = null;
+           rs = pStmnt.executeQuery();
+           while(rs.next()) {  
+               menu = new RestaurantOwner();
+               menu.setEmail(rs.getString(1));
+               menu.setName(rs.getString(2));
+               menu.setPassword(rs.getString(3));
+               
+               result.add(menu);
+           }
+           pStmnt.close();
+           cnnt.close();
+       } catch (SQLException ex) {
+           while (ex != null) {
+               ex.printStackTrace();
+               ex = ex.getNextException();
+           }
+       } catch (IOException ex) {
+           ex.printStackTrace();
+       } 
+       System.out.println(result.size());
+       return result;
+   }
+     public ArrayList<RestaurantOwner> getRestOwnByKey(String key){
+         Connection cnnt = null;
+       PreparedStatement pStmnt = null;
+       RestaurantOwner menu = null;
+      ArrayList<RestaurantOwner> result = new ArrayList<RestaurantOwner>();
+       try {
+           cnnt = getConnection();
+           String preQueryStatement = "SELECT * FROM restaurant_owner where name = ?";
+           pStmnt = cnnt.prepareStatement(preQueryStatement);
+           pStmnt.setString(1, key);
+            ResultSet rs = null;
+           rs = pStmnt.executeQuery();
+           while(rs.next()) {  
+               menu = new RestaurantOwner();
+               menu.setEmail(rs.getString(1));
+               menu.setName(rs.getString(2));
+               menu.setPassword(rs.getString(3));
+               
                result.add(menu);
            }
            pStmnt.close();

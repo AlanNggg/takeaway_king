@@ -1,3 +1,5 @@
+<%@page import="takeaway.bean.User"%>
+<%@page import="takeaway.db.UserDB"%>
 <%@page import="takeaway.bean.log"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="takeaway.db.CMS"%>
@@ -45,7 +47,6 @@ body {font-family: "Roboto", sans-serif}
   <div>
     <a class="w3-bar-item w3-button" onclick="myAccordion('mang_rest')" href="javascript:void(0)"><i class="fa fa-coffee fa-fw w3-margin-right w3-large w3-text-teal"></i>Restaurant Management <i class="fa fa-caret-down"></i></a>
     <div id="mang_rest" class="w3-hide">
-      <a class="w3-bar-item w3-button" href="#" onclick="show_add_rest_page()">Add Restaurant</a>
       <a id="btn_rest_list" class="w3-bar-item w3-button" onclick="show_rest_list_page()" href="#">Restaurant List</a>
 
     </div>
@@ -53,8 +54,8 @@ body {font-family: "Roboto", sans-serif}
   <div>
     <a class="w3-bar-item w3-button" onclick="myAccordion('mang_user')" href="javascript:void(0)"><i class="fa fa-address-card-o fa-fw w3-margin-right w3-large w3-text-teal"></i>User Management <i class="fa fa-caret-down"></i></a>
     <div id="mang_user" class="w3-hide">
-      <a id="btn_add_user" class="w3-bar-item w3-button" href="#">Add User</a>
-      <a id="btn_user_list" class="w3-bar-item w3-button" href="#">User List</a>
+      <a id="btn_add_user" class="w3-bar-item w3-button" href="#" onclick="show_add_user_page()">Add User</a>
+      <a id="btn_user_list" class="w3-bar-item w3-button" href="#"onclick="show_user_list_page()">User List</a>
     </div>
   </div>
 </nav>
@@ -65,6 +66,9 @@ body {font-family: "Roboto", sans-serif}
 
 <header class="w3-container w3-theme " style="padding:2px 10px">
   <h1 class="w3-xlarge">TakeAway King CMS</h1>
+  <div class="w3-right">
+      <button class="w3-button w3-white w3-border w3-border-red w3-round-large"><a href="logout_CMS.jsp">Logout</a></button>
+  </div>
 </header>
 
 <div id="home_page" class="w3-container" style="padding:32px">
@@ -102,7 +106,14 @@ body {font-family: "Roboto", sans-serif}
     
   </div>
 </div>
-    
+    <%
+            CMS cm = new CMS();
+            ArrayList aaa = cm.getAllUser();
+            int total = 0;
+                    total += aaa.size();
+                   aaa =  cm.getAllRestaurantID();
+                  total += aaa.size();
+    %>
     <div class="w3-row-padding" style="margin:16px -16px">
 
         <div class="w3-quarter">
@@ -112,7 +123,7 @@ body {font-family: "Roboto", sans-serif}
               </div>
                           <div class="w3-center" style="padding:16px 20px">
                                   <i class="fa fa-globe w3-jumbo" aria-hidden="true"></i>
-                                    <h2>76,3143</h2>
+                                    <h2>45879</h2>
                           </div>
             </div>
         </div>
@@ -124,7 +135,7 @@ body {font-family: "Roboto", sans-serif}
               </div>
                           <div class="w3-center" style="padding:16px 20px">
                                   <i class="fa fa-users w3-jumbo" aria-hidden="true"></i>
-                                    <h2>23,4143</h2>
+                                  <h2><%=total%></h2>
                           </div>
             </div>
         </div>
@@ -136,7 +147,7 @@ body {font-family: "Roboto", sans-serif}
               </div>
                           <div class="w3-center" style="padding:16px 20px">
                                   <i class="fa fa-registered w3-jumbo" aria-hidden="true"></i>
-                                    <h2>3430</h2>
+                                  <h2><%=aaa.size()%></h2>
                           </div>
             </div>
         </div>
@@ -345,20 +356,14 @@ body {font-family: "Roboto", sans-serif}
     <!--Add User Page Start-->
     <div id="add_user" class="w3-container" style="padding:32px">
         <div class="w3-panel w3-padding-16 w3-card">
-        <h2>News</h2>
-         <p>Show the new register,restaurant,menu here</p>
-
-        <table class="w3-table w3-striped w3-border">
-          <tr>
-            <th>Event</th>
-            <th>User</th>
-          </tr>
-          <tr>
-            <td>Add the New Restaurant</td>
-             <td>Tiny yup</td>
-          </tr>
-
-        </table>
+       <label class="w3-text-teal"><b>Add User</b></label>
+       <form target="_blank" action="add_user_CMS" method="post">
+           
+           <input type="email" id="add_user_email" name="add_user_email" placeholder="email" required><br><br>
+                   <input type="text" id="add_user_name" name="add_user_name"  placeholder="name" required><br><br>
+                  <input type="password" id="add_user_pwd" name="add_user_pwd"  placeholder="pwd" required><br><br>
+                  <input type="submit"/>
+              </form> 
       </div>
       </div>
           <!--Add User Page End-->
@@ -366,30 +371,25 @@ body {font-family: "Roboto", sans-serif}
             <!--Show User List Start-->
     <div id="show_user" class="w3-container" style="padding:32px">
         <div class="w3-panel w3-padding-16 w3-card">
-        <h2>News</h2>
-         <p>Show the new register,restaurant,menu here</p>
-
-        <table class="w3-table w3-striped w3-border">
-          <tr>
-            <th>Event</th>
-            <th>User</th>
-          </tr>
-          <tr>
-            <td>Add the New Restaurant</td>
-             <td>Tiny yup</td>
-          </tr>
-
-        </table>
+           <div class="w3-section">
+          <label><b>Add Username</b></label>
+          <br>
+          <input class="w3-input w3-border w3-margin-bottom" id="search_user_" type="text" placeholder="Enter Username" name="search_user_" required>
+         <br>
+         <br>
+          <table class="w3-table-all" id="modal_search_answer">
+          </table>
+            </div>
       </div>
       </div>
           <!--Show User List End-->
       </div>
-         <div style="display:hidden;">
+<!--         <div style="display:hidden;">
              <form target="_blank" action="restaurantDetail_CMS.jsp" method="get">
                   <input id="rest_id_selected" type="text" id="rid" name="rid">
                   <input id="jump_restaurant_detail"type="submit"/>
               </form> 
-         </div>
+         </div>-->
 <script>
     var filelist =[];
 //                                   document.getElementById("form_upload_Image").addEventListener('change',function(event){
@@ -508,10 +508,43 @@ body {font-family: "Roboto", sans-serif}
                                 xhttp.send("action=getRestList&dist="+ dist + "&areas="+ area + "&subdist="+subdist);
                             };
                             
-                            document.getElementById("shadow").onclick = function(){
-                                this.style.display = "none";
-                                document.getElementById("uploadBox").style.display = "none";
+                            document.getElementById("search_user_").onkeydown = function(){
+                                console.log(this.value);
+                                
+                             var xhttp = new XMLHttpRequest();
+                                xhttp.onreadystatechange = function() {
+                                  if (this.readyState === 4 && this.status === 200){
+                                    console.log(this.responseText);
+                                     var data = JSON.parse(this.responseText);
+                                     if(data.length >0){
+
+                                      var x = document.getElementById("modal_search_answer");
+                                         x.innerHTML = "<td>Email</td><td>Name</td><td></td>";
+                                    for(let i = 0 ; i < data.length ; i++){
+                                            var row = x.insertRow(i+1);
+                                            var cell1 = row.insertCell(0);
+                                            var cell2 = row.insertCell(1);
+                                            var cell3 = row.insertCell(2);
+                                            row.value = data[i].name;
+                                            cell1.innerHTML = data[i].name;
+                                            cell2.innerHTML = data[i].id;
+                                            cell3.innerHTML = "<button onclick=upload_this_owner_('"+data[i].name +"')>add</button>";
+                                            }
+                                        }
+                              
+                                }
+                                
                             };
+                                xhttp.open("POST", "cmsController", true);
+                                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                                xhttp.send("action=getUserByChar&key="+ this.value );
+                            
+                };
+                            
+//                            document.getElementById("shadow").onclick = function(){
+//                                this.style.display = "none";
+//                                document.getElementById("uploadBox").style.display = "none";
+//                            };
 </script>
 <!--function List-->
 <script>
@@ -541,13 +574,32 @@ body {font-family: "Roboto", sans-serif}
          document.getElementById("add_user").style.display = "none";
          document.getElementById("show_user").style.display = "none";
      }
+     function show_add_user_page(){
+         
+         console.log("sdadsdsa");
+         //document.getElementById("add_rest_page").style.display = "none";
+         document.getElementById("home_page").style.display = "none";
+         document.getElementById("show_rest_list_page").style.display = "none";
+         document.getElementById("add_user").style.display = "block";
+         document.getElementById("show_user").style.display = "none";
+     }
+     function show_user_list_page(){
+         
+         console.log("sdadsdsa");
+         //document.getElementById("add_rest_page").style.display = "none";
+         document.getElementById("home_page").style.display = "none";
+         document.getElementById("show_rest_list_page").style.display = "none";
+         document.getElementById("add_user").style.display = "none";
+         document.getElementById("show_user").style.display = "block";
+     }
      function show_home_page(){
          //document.getElementById("add_rest_page").style.display = "none";
          document.getElementById("home_page").style.display = "block";
          document.getElementById("show_rest_list_page").style.display = "none";
          document.getElementById("add_user").style.display = "none";
-         document.getElementById("show_user").style.display = "none";
-    }
+         document.getElementById("show_user").style.display
+     }
+
 
 function w3_open() {
   document.getElementById("mySidebar").style.display = "block";

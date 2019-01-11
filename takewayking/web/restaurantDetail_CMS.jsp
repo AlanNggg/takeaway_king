@@ -135,11 +135,11 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
   
        <!-- Container (Portfolio Section) -->
 <div class="w3-content w3-container w3-padding-32" id="portfolio">
-<button class="w3-button w3-blue w3-right">Add Owner</button>
+        <button class="w3-button w3-teal w3-right" onclick="document.getElementById('modal_add_user').style.display='block'">Add Owner</button>
   <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-address-book-o fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Owner</h2>
   <!-- Responsive Grid. Four columns on tablets, laptops and desktops. Will stack on mobile devices/small screens (100% width) -->
      <div class="w3-row-padding w3-center">
-          <table class="w3-table-all">
+     <table class="w3-table-all" id="table_owner">
     <thead>
       <tr class="w3-red">
         <th>Name</th>
@@ -147,8 +147,6 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
         <th></th>
       </tr>
     </thead>
-    
-
           <%
                             ArrayList<RestaurantOwner> roList = cms.getRestOwnerByRid(rid);
                                     for(int i = 0 ; i < roList.size();i++){
@@ -292,41 +290,137 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
     </div>
   </div>
 
-  <div id="modal_upload_image" class="w3-modal">
+  <div id="modal_add_user" class="w3-modal">
     <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
 
       <div class="w3-center"><br>
-        <span onclick="document.getElementById('modal_upload_image').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
-        <img src="img_avatar4.png" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top">
+        <span onclick="document.getElementById('modal_add_user').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+       
       </div>
-
-      <form class="w3-container" action="/action_page.php">
         <div class="w3-section">
-          <label><b>Username</b></label>
-          <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="usrname" required>
-          <label><b>Password</b></label>
-          <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="psw" required>
-          <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Login</button>
-          <input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me
-        </div>
-      </form>
-
-      <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
-        <button onclick="document.getElementById('modal_upload_image').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
-        <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span>
-      </div>
+          <label><b>Add Username</b></label>
+          <br>
+          <input class="w3-input w3-border w3-margin-bottom" id="modal_search_user" type="text" placeholder="Enter Username" name="usrname" required>
+         <br>
+         <br>
+          <table class="w3-table-all" id="modal_search_answer">
+          </table>
+            </div>
 
     </div>
   </div>
 
 <script>
+    function remove_owner(oid){
+        console.log(oid);
+         var x = document.getElementById("table_owner");
+         console.log(x.rows.length);
+         if(x.rows.length<=2){
+             alert("AtLeast one user");
+             return;
+         }else{
+              var xhttp = new XMLHttpRequest();
+                                xhttp.onreadystatechange = function() {
+                                  if (this.readyState === 4 && this.status === 200){
+                                    console.log(this.responseText);
+                                    location.reload(true);
+//                                     var data = JSON.parse(this.responseText);
+//                                     if(data.length >0){
+//
+//                                      var x = document.getElementById("modal_search_answer");
+//                                         x.innerHTML = "<td>Email</td><td>Name</td><td></td>";
+//                                    for(let i = 0 ; i < data.length ; i++){
+//                                        var row = x.insertRow(i+1);
+//                                        var cell1 = row.insertCell(0);
+//                                        var cell2 = row.insertCell(1);
+//                                        var cell3 = row.insertCell(2);
+//                                        row.value = data[i].name;
+//                                        cell1.innerHTML = data[i].name;
+//                                        cell2.innerHTML = data[i].id;
+//                                        cell3.innerHTML = "<button onclick=upload_this_owner_('"+data[i].name +"')>add</button>";
+//                                        }
+//                                        }
+                              
+                                }
+                                
+                            };
+                                xhttp.open("POST", "cmsController", true);
+                                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                                xhttp.send("action=deleteOwnByEmail&email="+ oid +"&rid=" +  <jsp:getProperty name="rest"property="id" /> );
+         }
+    }
          function onClick(element) {
             document.getElementById("img01").src = element.src;
             document.getElementById("modal01").style.display = "block";
             var captionText = document.getElementById("caption");
             captionText.innerHTML = element.alt;
           }
-          
+          document.getElementById("modal_search_user").onkeydown = function(){
+                                console.log(this.value);
+                             var xhttp = new XMLHttpRequest();
+                                xhttp.onreadystatechange = function() {
+                                  if (this.readyState === 4 && this.status === 200){
+                                    console.log(this.responseText);
+                                     var data = JSON.parse(this.responseText);
+                                     if(data.length >0){
+
+                                      var x = document.getElementById("modal_search_answer");
+                                         x.innerHTML = "<td>Email</td><td>Name</td><td></td>";
+                                    for(let i = 0 ; i < data.length ; i++){
+                                        var row = x.insertRow(i+1);
+                                        var cell1 = row.insertCell(0);
+                                        var cell2 = row.insertCell(1);
+                                        var cell3 = row.insertCell(2);
+                                        row.value = data[i].name;
+                                        cell1.innerHTML = data[i].name;
+                                        cell2.innerHTML = data[i].id;
+                                        cell3.innerHTML = "<button onclick=upload_this_owner_('"+data[i].name +"')>add</button>";
+                                        }
+                                        }
+                              
+                                }
+                                
+                            };
+                                xhttp.open("POST", "cmsController", true);
+                                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                                xhttp.send("action=getUserByChar&key="+ this.value );
+                            
+                };
+                function upload_this_owner_(v){
+                       console.log(v);
+                       var rid = <jsp:getProperty name="rest"property="id" />;
+                             var xhttp = new XMLHttpRequest();
+                                xhttp.onreadystatechange = function() {
+                                  if (this.readyState === 4 && this.status === 200){
+                                    console.log(this.responseText);
+                                     var data = JSON.parse(this.responseText);
+                                     if(data.length >0 && data.sid == "done"){
+                                         alert("Select success!!");
+                                         location.reload(true);
+                                        // window.location.href = "/restaurantDetail_CMS?rid="+ <jsp:getProperty name="rest"property="id" /> +">";
+                                     }
+//
+//                                      var x = document.getElementById("modal_search_answer");
+//                                         x.innerHTML = "<td>Email</td><td>Name</td><td></td>";
+//                                    for(let i = 0 ; i < data.length ; i++){
+//                                        var row = x.insertRow(i+1);
+//                                        var cell1 = row.insertCell(0);
+//                                        var cell2 = row.insertCell(1);
+//                                        var cell3 = row.insertCell(2);
+//                                        row.value = data[i].email;
+//                                        cell1.innerHTML = data[i].email;
+//                                        cell2.innerHTML = data[i].name;
+//                                        cell3.innerHTML = "<button onclick=upload_this_owner_('"+data[i].email +"')>add</button>";
+//                                        }
+//                                        }
+                              
+                                }
+                                
+                            };
+                                xhttp.open("POST", "cmsController", true);
+                                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                                xhttp.send("action=saveOwnerByEmail&email="+ v + "&rid="+rid);
+                }
           //handle district select box
                   document.getElementById("areas").onchange = function(){
                           
@@ -359,7 +453,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
                           
                                 xhttp.open("POST", "cmsController", true);
                                 xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                                xhttp.send("action=getDistrict&areas="+areas );
+                                xhttp.send("action=getDistrict&areas="+areas);
                             };
                          
                          //handle subdistrict select box

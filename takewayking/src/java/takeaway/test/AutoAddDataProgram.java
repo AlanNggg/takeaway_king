@@ -32,9 +32,9 @@ public class AutoAddDataProgram {
             try{
                    FakeDB db = new FakeDB();
                    String random =  RandomString();
-                   AddLog();
-//                   AddRestaurant(400);
-//                   AddMenu();
+                  AddOnwerToRest();
+               //  AddRestaurant(200);
+                // AddMenu();
             }catch(Exception e){
                 System.out.println(e.getMessage());
             }
@@ -56,14 +56,13 @@ public class AutoAddDataProgram {
           }
                
         }
-        
-         public static void AddMenu(){
+        public static void AddMenu(){
              CMS cmd  = new CMS();
              FakeDB db = new FakeDB();
             String base64 =null;
              String base642 =null;
-            File storeFile = new File("./web/images/dasdasdasd.png");
-             File storeFile2 = new File("./web/images/fdfsdfsdf.png");
+            File storeFile = new File("./web/images/bg1.jpg");
+             File storeFile2 = new File("./web/images/bg2.jpg");
             base64 = encodeFileToBase64Binary(storeFile);
             base642 = encodeFileToBase64Binary(storeFile2);
           ArrayList<String> ids = cmd.getAllRestaurantID();
@@ -71,6 +70,16 @@ public class AutoAddDataProgram {
             for(int i = 0 ; i < ids.size() ; i++){
                       cmd.saveMenuToDB(ids.get(i), base64);
                       cmd.saveMenuToDB(ids.get(i), base642);
+            }
+         }
+         public static void AddOnwerToRest(){
+             CMS cmd  = new CMS();
+             FakeDB db = new FakeDB();
+           
+          ArrayList<String> ids = cmd.getAllRestaurantID();
+          String email = "123@gmail.com";
+            for(int i = 0 ; i < ids.size() ; i++){
+                     cmd.saveOwnerRectToDB(email, ids.get(i));
             }
          }
          public static void AddUser(){

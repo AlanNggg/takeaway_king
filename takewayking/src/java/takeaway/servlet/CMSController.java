@@ -19,8 +19,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import takeaway.bean.Menus;
 import takeaway.bean.Restaurant;
+import takeaway.bean.RestaurantOwner;
 import takeaway.bean.User;
 import takeaway.db.CMS;
+import takeaway.db.UserDB;
 
 
 @WebServlet(name = "CMSController", urlPatterns = {"/cmsController"})
@@ -130,8 +132,56 @@ public class CMSController extends HttpServlet {
            System.out.println(json.toString());
             response.setContentType("application/json");
             response.getWriter().print(json.toString());
+        }else if(action.equals("getUserByChar")){
+             String key = request.getParameter("key");
+            CMS cms = new CMS();
+            ArrayList<RestaurantOwner> list = cms.getRestOwnByKey(key);
+             JsonArrayBuilder array = Json.createArrayBuilder();
+             for(int i = 0 ; i< list.size();i++ ){
+                 RestaurantOwner rest = list.get(i);
+                 array.add(
+                         Json.createObjectBuilder()
+                                .add("id",rest.getName())
+                                .add("name", rest.getEmail())
+                                .add("category",rest.getPassword())
+                        );
+              }
+             JsonArray json = array.build();
+             System.out.println(json.toString());
+            response.setContentType("application/json");
+            response.getWriter().print(json.toString());
+                
+            
+            
+        }else if(action.equals("saveOwnerByEmail")){
+             String email = request.getParameter("email");
+              String rid = request.getParameter("rid");
+            CMS cms = new CMS();
+            cms.saveOwnerRectToDB(email, rid);
+             JsonObjectBuilder jb = Json.createObjectBuilder();
+          
+            jb.add("sid","done");
+           JsonObject json = jb.build();
+           System.out.println(json.toString());
+            response.setContentType("application/json");
+            response.getWriter().print(json.toString());
+                
+            
+            
+        }else if(action.equals("deleteOwnByEmail")){
+              String email = request.getParameter("email");
+              String rid = request.getParameter("rid");
+            CMS cms = new CMS();
+            cms.deleteOwnToDB(email, rid);
+             JsonObjectBuilder jb = Json.createObjectBuilder();
+          
+            jb.add("sid","done");
+           JsonObject json = jb.build();
+           System.out.println(json.toString());
+            response.setContentType("application/json");
+            response.getWriter().print(json.toString());
         }
-              
+          
 //                ArrayList<Menus>list =db.getMenus("1");
 //            JsonArrayBuilder array = Json.createArrayBuilder();
 //             for(int i = 0 ; i< list.size();i++ ){
