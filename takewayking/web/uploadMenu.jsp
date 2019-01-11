@@ -54,14 +54,11 @@
                   %>
 
               </select>
+                  
                <select  id="districts" name='districts'>  
                   <option value="">-Please select the area first-</option>  
-                 
               </select>
-                <select  id="subdistricts" name='subdistricts'>  
-         
-                 
-              </select>
+                <select  id="subdistricts" name='subdistricts'> </select>
          
               <table id="shoplist" border="1"></table>
 

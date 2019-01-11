@@ -86,9 +86,12 @@ public class CMSController extends HttpServlet {
                                 .add("name", rest.getName())
                                 .add("category",rest.getCategory())
                                 .add("address",rest.getAddress())
+                                .add("rate",rest.getRate())
+                                .add("visitor", rest.getVisitors())
                         );
               }
              JsonArray json = array.build();
+             System.out.println(json.toString());
             response.setContentType("application/json");
             response.getWriter().print(json.toString());
             
@@ -124,7 +127,7 @@ public class CMSController extends HttpServlet {
            }
            jb.add("menus",array);
            JsonObject json = jb.build();
-           
+           System.out.println(json.toString());
             response.setContentType("application/json");
             response.getWriter().print(json.toString());
         }

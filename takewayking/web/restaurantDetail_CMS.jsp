@@ -5,6 +5,8 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="takeaway.db.CMS" %>
 <%@page import="takeaway.bean.Menus" %>
+
+
 <html>
 <title>W3.CSS Template</title>
 <meta charset="UTF-8">
@@ -15,18 +17,36 @@
 <style>
 html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
 </style>
+
 <body class="w3-light-grey">
+      <jsp:useBean id="rest" class="takeaway.bean.Restaurant" scope="page" /> 
   <%
                     String rid =  request.getParameter("rid");
                    CMS cms = new CMS();
-                   ArrayList<Restaurant> restArray = cms.getRestListById(rid);
-                   Restaurant rest = restArray.get(0);
+                   ArrayList<Restaurant> al= cms.getRestListById(rid);
+                  // Restaurant rest = al.get(0).getSubdistrict();
 
                    // Get the all image from DB first                   
                    ArrayList<Menus> menus = cms.getMenus(rid);
                     Menus menu  = menus.get(0);
  %>
-                            
+   <jsp:setProperty name="rest" property="category" value="<%=al.get(0).getCategory()%>"/> 
+   <jsp:setProperty name="rest" property="name" value="<%=al.get(0).getName()%>"/>   
+   <jsp:setProperty name="rest" property="tel" value="<%=al.get(0).getTel()%>"/>
+   <jsp:setProperty name="rest" property="area" value="<%=al.get(0).getArea()%>"/>
+   <jsp:setProperty name="rest" property="district" value="<%=al.get(0).getDistrict()%>"/> 
+   <jsp:setProperty name="rest" property="subdistrict" value="<%=al.get(0).getSubdistrict()%>"/> 
+   <jsp:setProperty name="rest" property="address" value="<%=al.get(0).getAddress()%>"/> 
+   <jsp:setProperty name="rest" property="monday" value="<%=al.get(0).getMonday()%>"/> 
+   <jsp:setProperty name="rest" property="tuesday" value="<%=al.get(0).getTuesday()%>"/> 
+   <jsp:setProperty name="rest" property="wednesday" value="<%=al.get(0).getWednesday()%>"/> 
+   <jsp:setProperty name="rest" property="thursday" value="<%=al.get(0).getThursday()%>"/>
+   <jsp:setProperty name="rest" property="friday" value="<%=al.get(0).getFriday()%>"/> 
+   <jsp:setProperty name="rest" property="saturday" value="<%=al.get(0).getSaturday()%>"/> 
+   <jsp:setProperty name="rest" property="sunday" value="<%=al.get(0).getSunday()%>"/> 
+   <jsp:setProperty name="rest" property="rate" value="<%=al.get(0).getRate()%>"/> 
+   <jsp:setProperty name="rest" property="visitors" value="<%=al.get(0).getVisitors()%>"/> 
+   <jsp:setProperty name="rest" property="id" value="<%=al.get(0).getId()%>"/> 
 <!-- Page Container -->
 <div class="w3-content w3-margin-top" style="max-width:1400px;">
 
@@ -39,17 +59,17 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
         <div class="w3-display-container">
             <img src="data:image/png;base64,<%=menu.getMenu()%>" style="width:100%" alt="Avatar">
           <div class="w3-display-bottomleft w3-container w3-text-black">
-              <h2 style='color:white'><%=rest.getName()%></h2>
+              <h2 style='color:white'><jsp:getProperty name="rest"property="name" /></h2>
           </div>
         </div>
         <div class="w3-container">
-            <p><i class="fa fa-coffee fa-fw w3-margin-right w3-large w3-text-teal"></i><%= rest.getCategory()%></p>
-          <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i><%  out.print( rest.getAddress());%></p>
-          <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>1224435534</p>
+            <p><i class="fa fa-coffee fa-fw w3-margin-right w3-large w3-text-teal"></i><jsp:getProperty name="rest"property="category" /></p>
+          <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i><jsp:getProperty name="rest"property="address" /></p>
+          <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i><jsp:getProperty name="rest"property="tel" /></p>
           <hr>
 
         </div>
-        <button class="w3-button w3-teal w3-right">Modify Detail</button>
+        <button class="w3-button w3-teal w3-right" onclick="document.getElementById('modal_upload_info').style.display='block'">Modify Detail</button>
       </div><br>
 
     <!-- End Left Column -->
@@ -86,7 +106,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
   
        <!-- Container (Portfolio Section) -->
 <div class="w3-content w3-container w3-padding-32" id="portfolio">
-<button class="w3-button w3-blue w3-right">Manage Menus</button>
+<!--<button class="w3-button w3-blue w3-right" onclick="document.getElementById('modal_upload_image').style.display='block'">Upload Menus</button>-->
   <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-cutlery fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Menus</h2>
   <!-- Responsive Grid. Four columns on tablets, laptops and desktops. Will stack on mobile devices/small screens (100% width) -->
      <div class="w3-row-padding w3-center">
@@ -191,6 +211,114 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
   <!-- End Page Container -->
 </div>
 
+<div id="modal_upload_info" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+      <div class="w3-center"><br>
+        <span onclick="document.getElementById('modal_upload_info').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+      
+      </div>
+
+      <form class="w3-container" action="upLoadMenuImage" method="post" enctype="multipart/form-data"> 
+          <div  style="display:none;">
+          <input id="form_rest_id" name="form_rest_id" type="text"  value="<jsp:getProperty name="rest"property="id"/>">
+          </div>
+         <label class="w3-text-teal"><b>Restaurant Name</b></label>
+         <input id="form_rest_name" name="form_rest_name"class="w3-input w3-border" type="text"  value="<jsp:getProperty name="rest"property="name"/>">
+             <br>
+            <label class="w3-text-teal"><b>Category Name</b></label>
+            <select id="form_category_name" name="form_category_name" class="w3-select w3-border" name="cate_type" value="<jsp:getProperty name="rest"property="category"/>">
+                <option value="" disabled selected>Choose Restaurant Food Type</option>
+                <%
+                    cms = new CMS();
+                    ArrayList<String> gLS = cms.getCategory();
+                    for(String cate : gLS){
+                        out.print(" <option value=\""+ cate+"\">"+cate+"</option>");
+                    }
+                %>
+            </select>
+             <br> <br>
+            <label class="w3-text-teal"><b>Telephone:</b></label>
+            <input id="form_rest_tel" name="form_rest_tel"class="w3-input w3-border " type="text" value="<jsp:getProperty name="rest"property="tel"/>">
+            <br>
+            
+            <label class="w3-text-teal"><b>Area</b></label>
+          <div class="w3-row-padding">
+          <div class="w3-third">
+            <select class="w3-select" id="areas"  name="areas">
+                <option value="" disabled selected>Choose Restaurant Food Type</option>
+                 <%
+                       cms = new CMS();
+                       ArrayList<String> result = cms.getAllAreas();
+                       for(int i = 0 ; i <result.size() ; i++){
+                           out.print(result.size());
+                  %>
+
+                  <option value="<%=result.get(i)%>"><%=result.get(i)%></option>  
+                  <%                              
+                     }
+                  %>
+            </select>
+            
+
+          </div>   
+            
+          <div class="w3-third">
+             <select class="w3-select" id="districts" name='districts'>  
+                <option value="" disabled selected>-Districts-</option>
+               </select>
+          </div>
+          <div class="w3-third">
+              <select class="w3-select" id="subdistricts" name='subdistricts'> 
+                  <option value="" disabled selected>-Subdistricts-</option>
+              </select>
+          </div>
+            
+        </div>
+            <br>
+            <label  class="w3-text-teal"><b>Location Detail</b></label>
+            <input id="form_rest_location" name="form_rest_location" class="w3-input w3-border " type="text" value="<jsp:getProperty name="rest"property="address"/>">
+            <br>        
+            <br>
+             <label class="w3-text-teal"><b>Upload Menu</b></label>
+             <input id="form_upload_Image"name="form_upload_Image"class="w3-input w3-border" type="file" accept="image/png" multiple />
+
+             <br>
+             <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+                    <input class="w3-btn w3-blue-grey w3-right" type="submit" value="Submit" >
+        
+               </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="modal_upload_image" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+      <div class="w3-center"><br>
+        <span onclick="document.getElementById('modal_upload_image').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+        <img src="img_avatar4.png" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top">
+      </div>
+
+      <form class="w3-container" action="/action_page.php">
+        <div class="w3-section">
+          <label><b>Username</b></label>
+          <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="usrname" required>
+          <label><b>Password</b></label>
+          <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="psw" required>
+          <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Login</button>
+          <input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me
+        </div>
+      </form>
+
+      <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+        <button onclick="document.getElementById('modal_upload_image').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
+        <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span>
+      </div>
+
+    </div>
+  </div>
+
 <script>
          function onClick(element) {
             document.getElementById("img01").src = element.src;
@@ -198,6 +326,76 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
             var captionText = document.getElementById("caption");
             captionText.innerHTML = element.alt;
           }
+          
+          //handle district select box
+                  document.getElementById("areas").onchange = function(){
+                          
+                                var areas = this.value;
+                                 if(areas === ""){
+                                            document.getElementById("districts").innerHTML = '<option value="">-Please select the area first-</option>';
+                                            document.getElementById("subdistricts").innerHTML = null;
+                                            document.getElementById("shoplist") = null;
+                                       return;
+                                        }
+                                var xhttp = new XMLHttpRequest();
+                                xhttp.onreadystatechange = function() {
+                                  if (this.readyState === 4 && this.status === 200) {
+                                    console.log(this.responseText);
+                                    var data = JSON.parse(this.responseText);
+                                    var data = data.dist;
+                                    var x = document.getElementById("districts");
+                                   x.innerHTML = null;
+                                    for(let i = 0 ; i < data.length ; i++){
+                                        var option = document.createElement("option");
+                                        option.text = data[i];
+                                        option.value = data[i];
+                                        x.add(option);
+                                    }
+
+                                  }
+                              
+                                };
+                            
+                          
+                                xhttp.open("POST", "cmsController", true);
+                                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                                xhttp.send("action=getDistrict&areas="+areas );
+                            };
+                         
+                         //handle subdistrict select box
+                         document.getElementById("districts").onchange = function(){
+                             
+  
+                                    console.log("sadasd");
+                                      var dist = this.value;
+                                      var area = document.getElementById("areas").value;
+                                      
+                                      var xhttp = new XMLHttpRequest();
+                                      xhttp.onreadystatechange = function() {
+                                        if (this.readyState === 4 && this.status === 200) {
+                                          console.log(this.responseText);
+                                          var data = JSON.parse(this.responseText);
+                                          var data = data.subdist;
+                                          var x = document.getElementById("subdistricts");
+                                            x.innerHTML = null;
+                                          for(let i = 0 ; i < data.length ; i++){
+                                              var option = document.createElement("option");
+                                              option.text = data[i];
+                                              option.value = data[i];
+                                              x.add(option);
+                                          }
+
+                                        }
+
+                                      };
+                                  
+                 
+                                      xhttp.open("POST", "cmsController", true);
+                                      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                                      xhttp.send("action=getSubDistrict&dist="+ dist + "&areas="+area);
+                            };
+                            
+                      
 
 </script>
 
