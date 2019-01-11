@@ -138,7 +138,6 @@ public class RestaurantDB {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
         Restaurant restaurant = null;
-        ArrayList<Restaurant> result = new ArrayList<Restaurant>();
         try {
             cnnt = getConnection();
             String preQueryStatement = "SELECT * FROM RESTAURANT WHERE ID=?";
