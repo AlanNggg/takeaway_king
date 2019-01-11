@@ -30,6 +30,7 @@ public class Login_CMS extends HttpServlet{
         String email = request.getParameter("email");
         String pwd = request.getParameter("pwd");
         String cb = request.getParameter("remember");
+        String type = request.getParameter("type");
         System.out.print("Input is " + email +" , "+ pwd + " , " + cb);
         
         CMS db = new CMS();
@@ -38,7 +39,7 @@ public class Login_CMS extends HttpServlet{
         
         if (isValid) {
               if(cb != null){
-             Cookie ck=new Cookie("user",email);//deleting value of cookie  
+                    Cookie ck=new Cookie("user",email);//deleting value of cookie  
                  ck.setMaxAge(60*60*2);//changing the maximum age to 0 seconds  
                 response.addCookie(ck);//adding cookie in the response  
               }
@@ -46,7 +47,11 @@ public class Login_CMS extends HttpServlet{
             Administrator user = db.getAdministrator(email, pwd);
             
             session.setAttribute("admin", user.getEmail());
+            if(type.equals("admin")){
                 targetURL = "index_CMS.jsp";
+            }else{
+                targetURL = "index_Onwer_CMS.jsp";
+            }
         } else {
            
             targetURL = "login_CMS.jsp";

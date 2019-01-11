@@ -18,6 +18,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import org.apache.commons.codec.binary.Base64;
 import takeaway.bean.Restaurant;
+import takeaway.bean.RestaurantOwner;
 import takeaway.db.CMS;
 import takeaway.db.FakeDB;
 
@@ -32,7 +33,9 @@ public class AutoAddDataProgram {
             try{
                    FakeDB db = new FakeDB();
                    String random =  RandomString();
-                  AddOnwerToRest();
+              
+                   //AddUser();
+                  //AddOnwerToRest();
                //  AddRestaurant(200);
                 // AddMenu();
             }catch(Exception e){
@@ -77,14 +80,14 @@ public class AutoAddDataProgram {
              FakeDB db = new FakeDB();
            
           ArrayList<String> ids = cmd.getAllRestaurantID();
-          String email = "123@gmail.com";
+          ArrayList<RestaurantOwner> o = cmd.getAllOwner();
             for(int i = 0 ; i < ids.size() ; i++){
-                     cmd.saveOwnerRectToDB(email, ids.get(i));
+                     cmd.saveOwnerRectToDB(o.get((i % o.size())).getEmail(), ids.get(i));
             }
          }
          public static void AddUser(){
             ArrayList<String>emails = new ArrayList<String>();
-            for(int i = 0 ; i < 20 ; i++){
+            for(int i = 0 ; i < 1000 ; i++){
                 boolean isRepeat = false;
                 do{
                     isRepeat = false;
@@ -101,7 +104,7 @@ public class AutoAddDataProgram {
             System.out.println(emails.toString());
             
              ArrayList<String>names = new ArrayList<String>();
-            for(int i = 0 ; i < 20 ; i++){
+            for(int i = 0 ; i < 1000 ; i++){
                 boolean isRepeat = false;
                 do{
                     isRepeat = false;
@@ -119,8 +122,50 @@ public class AutoAddDataProgram {
             String name=null,password="123456";
             
              FakeDB db = new FakeDB();
-              for(int i = 0 ; i < 20 ; i++){
+              for(int i = 0 ; i < 1000 ; i++){
                   db.saveUserToDB(emails.get(i),names.get(i) , password);
+              }
+            
+        }
+          public static void AddOwner(int num){
+            ArrayList<String>emails = new ArrayList<String>();
+            for(int i = 0 ; i < num ; i++){
+                boolean isRepeat = false;
+                do{
+                    isRepeat = false;
+                    String r = RandomString(4) + "@gmail.com";
+                    if(emails.contains(r)){
+                        isRepeat = true;
+                        System.out.println("Email is repeat");
+                    }else{
+                        emails.add(r);
+                    }
+                    
+                }while(isRepeat);
+            }
+            System.out.println(emails.toString());
+            
+             ArrayList<String>names = new ArrayList<String>();
+            for(int i = 0 ; i < num ; i++){
+                boolean isRepeat = false;
+                do{
+                    isRepeat = false;
+                    String r = RandomString(4) + " " + RandomString(4);
+                    if(emails.contains(r)){
+                        isRepeat = true;
+                        System.out.println("Name is repeat");
+                    }else{
+                        names.add(r);
+                    }
+                    
+                }while(isRepeat);
+            }
+             System.out.println(names.toString());
+            String name=null,password="123456";
+            
+             FakeDB db = new FakeDB();
+              for(int i = 0 ; i < num ; i++){
+                  db.saveOwnerToDB(emails.get(i),names.get(i) , password);
               }
             
         }

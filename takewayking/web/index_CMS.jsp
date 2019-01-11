@@ -123,7 +123,18 @@ body {font-family: "Roboto", sans-serif}
               </div>
                           <div class="w3-center" style="padding:16px 20px">
                                   <i class="fa fa-globe w3-jumbo" aria-hidden="true"></i>
-                                    <h2>45879</h2>
+                                    <h2>
+                                        <%
+                                            CMS c  = new CMS();
+                                             ArrayList<log> lo =  c.getLog();
+                                             int t = 0;
+                                             for(log a : lo){
+                                                   t += Integer.parseInt(a.getNonRegister()) + Integer.parseInt(a.getRegister()) + Integer.parseInt(a.getOwner());
+                                             }
+                                            
+                                        %>
+                                        <%=t%>
+                                    </h2>
                           </div>
             </div>
         </div>
@@ -135,7 +146,16 @@ body {font-family: "Roboto", sans-serif}
               </div>
                           <div class="w3-center" style="padding:16px 20px">
                                   <i class="fa fa-users w3-jumbo" aria-hidden="true"></i>
-                                  <h2><%=total%></h2>
+                                  <h2>
+                                      <%
+                                              c  = new CMS();
+                                              ArrayList<User> uu =  c.getAllUser();
+                                  
+                                            
+                                        %>
+                                        <%=uu.size()%>
+          
+                                  </h2>
                           </div>
             </div>
         </div>
@@ -147,7 +167,15 @@ body {font-family: "Roboto", sans-serif}
               </div>
                           <div class="w3-center" style="padding:16px 20px">
                                   <i class="fa fa-registered w3-jumbo" aria-hidden="true"></i>
-                                  <h2><%=aaa.size()%></h2>
+                                  <h2>
+                                      <%
+                                              c  = new CMS();
+                                            ArrayList  alls =  c.getAllRestaurantID();
+                                            
+                                            
+                                        %>
+                                        <%=alls.size()%>
+                                  </h2>
                           </div>
             </div>
         </div>
@@ -159,7 +187,15 @@ body {font-family: "Roboto", sans-serif}
               </div>
                           <div class="w3-center" style="padding:16px 20px">
                                   <i class="fa fa-list-alt w3-jumbo" aria-hidden="true"></i>
-                                    <h2>100,5432</h2>
+                                    <h2>
+                                         <%
+                                              c  = new CMS();
+                                            ArrayList<String> als =  c.getAllMemu();
+                                            
+                                            
+                                        %>
+                                        <%=als.size()%>
+                                    </h2>
                           </div>
             </div>
         </div>
@@ -216,17 +252,17 @@ body {font-family: "Roboto", sans-serif}
           <div class="w3-third">
             <select class="w3-select" id="areas"  name="areas">
                 <option value="" disabled selected>Choose Restaurant Food Type</option>
-                 <%
+              
 //                        cms = new CMS();
 //                       ArrayList<String> result = cms.getAllAreas();
 //                       for(int i = 0 ; i <result.size() ; i++){
 //                           out.print(result.size());
-                  %>
+               
 
                   <option value=""></option>  
-                  <%                              
+                                          
                     // }
-                  %>
+                
             </select>
             
                
@@ -392,24 +428,6 @@ body {font-family: "Roboto", sans-serif}
          </div>-->
 <script>
     var filelist =[];
-//                                   document.getElementById("form_upload_Image").addEventListener('change',function(event){
-//
-//                                    for(let i = 0 ; i < this.files.length;i++){
-//                                        var promise = getBase64(this.files[i]);
-//                                            promise.then(function(result) {
-//                                    
-//                                                filelist.push(result);
-//                                                document.getElementById("image_selected").innerHTML 
-//                                                                  += "<div class=\"w3-col m3\">"
-//                                                                     + "<img style=\"width:100%;margin-bottom:5px;\" onclick=\"onClick_Image(this)\" class=\"w3-hover-opacity\" src='"+result+"'/>";
-//                                                                     +"</div>";
-//                                         });
-//                                      
-//                                       
-//                                    }
-//                                   
-//                                ;
-//                            });
     
           //handle district select box
                   document.getElementById("areas").onchange = function(){
@@ -518,17 +536,17 @@ body {font-family: "Roboto", sans-serif}
                                      var data = JSON.parse(this.responseText);
                                      if(data.length >0){
 
-                                      var x = document.getElementById("modal_search_answer");
-                                         x.innerHTML = "<td>Email</td><td>Name</td><td></td>";
-                                    for(let i = 0 ; i < data.length ; i++){
-                                            var row = x.insertRow(i+1);
-                                            var cell1 = row.insertCell(0);
-                                            var cell2 = row.insertCell(1);
-                                            var cell3 = row.insertCell(2);
-                                            row.value = data[i].name;
-                                            cell1.innerHTML = data[i].name;
-                                            cell2.innerHTML = data[i].id;
-                                            cell3.innerHTML = "<button onclick=upload_this_owner_('"+data[i].name +"')>add</button>";
+                                        var x = document.getElementById("modal_search_answer");
+                                           x.innerHTML = "<td>Email</td><td>Name</td><td></td>";
+                                              for(let i = 0 ; i < data.length ; i++){
+                                                var row = x.insertRow(i+1);
+                                                var cell1 = row.insertCell(0);
+                                                var cell2 = row.insertCell(1);
+                                                var cell3 = row.insertCell(2);
+                                                row.value = data[i].name;
+                                                cell1.innerHTML = data[i].name;
+                                                cell2.innerHTML = data[i].id;
+                                                cell3.innerHTML = "<button onclick=upload_this_owner_('"+data[i].name +"')>add</button>";
                                             }
                                         }
                               

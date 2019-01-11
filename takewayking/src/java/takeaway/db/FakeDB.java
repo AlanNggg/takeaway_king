@@ -74,6 +74,31 @@ public class FakeDB extends CMS {
                 return false;
             }
           }
+                  public boolean saveOwnerToDB(String email,String name,String pwd){
+            int flag = 0;
+            Connection cnnt = null;
+           Statement stmnt = null;
+          try {
+              cnnt = getConnection();
+            stmnt = cnnt.createStatement();
+              String sql = "INSERT INTO restaurant_owner VALUES ( '"+email+"' , '" + name+"' , '" + pwd+"' )";
+              flag = stmnt.executeUpdate(sql);
+
+          } catch (SQLException ex) {
+              while (ex != null) {
+                  ex.printStackTrace();
+                  ex = ex.getNextException();
+              }
+          } catch (IOException ex) {
+              ex.printStackTrace();
+          }
+
+           if(flag == 1){
+                return true;
+            }else{
+                return false;
+            }
+          }
                public boolean saveRestaurantToDB(Restaurant rest){
             int flag = 0;
             Connection cnnt = null;

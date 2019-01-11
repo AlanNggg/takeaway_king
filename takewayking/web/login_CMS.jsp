@@ -35,7 +35,12 @@
           <label><b>Password</b></label>
           <input class="w3-input w3-border" type="text" placeholder="Enter Password" name="pwd" required>
           <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Login</button>
-          <input class="w3-check w3-margin-top" id="remember" name="remember" type="checkbox" > Remember me
+           <input class="w3-radio" type="radio" name="type" value="admin" >
+                <label>Admin</label>
+                <input class="w3-radio" type="radio" name="type" value="owner">
+                <label>Restaurant Owner</label>
+                <br>
+                <input class="w3-check w3-margin-top" id="remember" name="remember" type="checkbox" > Remember me
         </div>
       </form>
 
