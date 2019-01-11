@@ -5,8 +5,6 @@
  */
 package takeaway.servlet;
 
-
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -19,45 +17,53 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import takeaway.bean.Administrator;
+import takeaway.bean.RestaurantOwner;
 import takeaway.bean.User;
 import takeaway.db.CMS;
 
 @WebServlet(urlPatterns = {"/login_CMS"})
-public class Login_CMS extends HttpServlet{
+public class Login_CMS extends HttpServlet {
+
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-            
+        String role = request.getParameter("role");
         String email = request.getParameter("email");
         String pwd = request.getParameter("pwd");
         String cb = request.getParameter("remember");
-        System.out.print("Input is " + email +" , "+ pwd + " , " + cb);
-        
+        System.out.print("Input is " + email + " , " + pwd + " , " + cb);
+
         CMS db = new CMS();
         String targetURL = null;
-        boolean isValid =   db.isValidAdmin(email, pwd);
-        
-        if (isValid) {
-              if(cb != null){
-             Cookie ck=new Cookie("user",email);//deleting value of cookie  
-                 ck.setMaxAge(60*60*2);//changing the maximum age to 0 seconds  
-                response.addCookie(ck);//adding cookie in the response  
-              }
-            HttpSession session = request.getSession(true);
-            Administrator user = db.getAdministrator(email, pwd);
-            
-            session.setAttribute("admin", user.getEmail());
-                targetURL = "index_CMS.jsp";
+        boolean isValid;
+        if (role.equals("owner")) {
+            isValid = db.isValidOwner(email, pwd);
         } else {
-           
+            isValid = db.isValidAdmin(email, pwd);
+        }
+        if (isValid) {
+            if (cb != null) {
+                Cookie ck = new Cookie("user", email);//deleting value of cookie  
+                ck.setMaxAge(60 * 60 * 2);//changing the maximum age to 0 seconds  
+                response.addCookie(ck);//adding cookie in the response  
+            }
+            if (role.equals("owner")) {
+                HttpSession session = request.getSession(true);
+                RestaurantOwner user = db.getRestaurantOwner(email, pwd);
+                session.setAttribute("owner", user.getEmail());
+                targetURL = "index_CMS_owner.jsp";
+            } else {
+                HttpSession session = request.getSession(true);
+                Administrator user = db.getAdministrator(email, pwd);
+                session.setAttribute("admin", user.getEmail());
+                targetURL = "index_CMS.jsp";
+            }
+        } else {
+
             targetURL = "login_CMS.jsp";
         }
         RequestDispatcher rd;
         rd = getServletContext().getRequestDispatcher("/" + targetURL);
         rd.forward(request, response);
-        
-      
-               
-        
-        
+
     }
 }
