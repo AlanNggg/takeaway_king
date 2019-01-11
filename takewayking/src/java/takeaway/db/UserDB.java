@@ -21,7 +21,7 @@ import takeaway.bean.User;
  * @author user
  */
 public class UserDB {
-    
+
     private String dbUrl = "";
     private String dbUser = "";
     private String dbPassword = "";
@@ -31,17 +31,17 @@ public class UserDB {
         this.dbUser = dbUser;
         this.dbPassword = dbPassword;
     }
-    
+
     public Connection getConnection() throws SQLException, IOException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             return DriverManager.getConnection(dbUrl, dbUser, dbPassword);
         } catch (ClassNotFoundException e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
         return null;
     }
-    
+
     public boolean isValidUser(String email, String pwd) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -66,10 +66,10 @@ public class UserDB {
             }
         } catch (IOException ex) {
             ex.printStackTrace();
-        } 
+        }
         return isValid;
     }
-    
+
     public User getUser(String email, String pwd) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -97,10 +97,40 @@ public class UserDB {
             }
         } catch (IOException ex) {
             ex.printStackTrace();
-        } 
+        }
         return user;
     }
     
+    public User getUserByEmail(String email) {
+        Connection cnnt = null;
+        PreparedStatement pStmnt = null;
+        User user = null;
+        try {
+            cnnt = getConnection();
+            String preQueryStatement = "SELECT * FROM USER WHERE EMAIL=?";
+            pStmnt = cnnt.prepareStatement(preQueryStatement);
+            pStmnt.setString(1, email);
+            ResultSet rs = null;
+            rs = pStmnt.executeQuery();
+            if (rs.next()) {
+                user = new User();
+                user.setEmail(rs.getString(1));
+                user.setName(rs.getString(2));
+                user.setPassword(rs.getString(3));
+            }
+            pStmnt.close();
+            cnnt.close();
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return user;
+    }
+
     public boolean addUser(String email, String name, String pwd) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -128,18 +158,31 @@ public class UserDB {
         }
         return isSuccess;
     }
-    
+
     public boolean editUser(User user) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
         boolean isSuccess = false;
         try {
             cnnt = getConnection();
-            String preQueryStatement = "UPDATE USER SET NAME=?, PASSWORD=? WHERE EMAIL=?";
-            pStmnt = cnnt.prepareStatement(preQueryStatement);
-            pStmnt.setString(1, user.getName());
-            pStmnt.setString(2, user.getPassword());
-            pStmnt.setString(3, user.getEmail());
+            String preQueryStatement = "";
+            if (!user.getName().equals("") && !user.getPassword().equals("")) {
+                preQueryStatement = "UPDATE USER SET NAME=?, PASSWORD=? WHERE EMAIL=?";
+                pStmnt = cnnt.prepareStatement(preQueryStatement);
+                pStmnt.setString(1, user.getName());
+                pStmnt.setString(2, user.getPassword());
+                pStmnt.setString(3, user.getEmail());
+            } else if (!user.getName().equals("")) {
+                preQueryStatement = "UPDATE USER SET NAME=? WHERE EMAIL=?";
+                pStmnt = cnnt.prepareStatement(preQueryStatement);
+                pStmnt.setString(1, user.getName());
+                pStmnt.setString(2, user.getEmail());
+            } else {
+                preQueryStatement = "UPDATE USER SET PASSWORD=? WHERE EMAIL=?";
+                pStmnt = cnnt.prepareStatement(preQueryStatement);
+                pStmnt.setString(1, user.getPassword());
+                pStmnt.setString(2, user.getEmail());
+            }
             int rowCount = pStmnt.executeUpdate();
             if (rowCount >= 1) {
                 isSuccess = true;
@@ -156,7 +199,7 @@ public class UserDB {
         }
         return isSuccess;
     }
-    
+
     public ArrayList<User> queryUser() {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -185,7 +228,7 @@ public class UserDB {
         }
         return result;
     }
-    
+
     public User queryUserByEmail(String email) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -215,7 +258,7 @@ public class UserDB {
         }
         return user;
     }
-    
+
     public ArrayList<User> queryUserByName(String name) {
         Connection cnnt = null;
         PreparedStatement pStmnt = null;
@@ -271,7 +314,7 @@ public class UserDB {
         }
         return isSuccess;
     }
-    
+
     public String getDbUrl() {
         return dbUrl;
     }

@@ -10,7 +10,7 @@ package takeaway.bean;
  * @author user
  */
 public class MenuCollections {
-    private String user_email, restaurant_id, menu, rate;
+    private String user_email, restaurant_id, menu_id, rate;
 
     public String getUser_email() {
         return user_email;
@@ -28,12 +28,12 @@ public class MenuCollections {
         this.restaurant_id = restaurant_id;
     }
 
-    public String getMenu() {
-        return menu;
+    public String getMenu_id() {
+        return menu_id;
     }
 
-    public void setMenu(String menu) {
-        this.menu = menu;
+    public void setMenu_id(String menu_id) {
+        this.menu_id = menu_id;
     }
 
     public String getRate() {

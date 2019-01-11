@@ -1,7 +1,7 @@
 <%-- 
-    Document   : login
-    Created on : Nov 28, 2018, 4:09:26 PM
-    Author     : stit
+    Document   : Register
+    Created on : Jan 11, 2019, 4:49:11 AM
+    Author     : user
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -35,15 +35,10 @@
             .message-box-error{
                 background: #dd4848;
             }
-            .message-box-alert{
-                background: #ddd348;
-            }
         </style>
         <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     </head>
     <body>
-
-
 
         <div class="container-scroller">
             <div class="container-fluid page-body-wrapper full-page-wrapper">
@@ -53,14 +48,15 @@
                         <div class="col-lg-4 mx-auto">
                             <div class="auth-form-light text-left p-5">
                                 <div class="message-box"></div>
+                                <h4>Please sign up</h4>
                                 <%
-                                    if (request.getAttribute("isValid") != null) {
-                                        boolean isValid = ((Boolean) request.getAttribute("isValid")).booleanValue();
-                                        if (!isValid) {%>
+                                    if (request.getAttribute("isSuccess") != null) {
+                                        boolean isSuccess = ((Boolean) request.getAttribute("isSuccess")).booleanValue();
+                                        if (!isSuccess) {%>
                                 <script>
                                     $(".message-box").addClass("message-box-error")
                                             .removeClass("message-box-alert")
-                                            .text("Your email or password is incorrect ")
+                                            .text("Your email has been already sign up!")
                                             .show(300)
                                             .delay(2000)
                                             .hide(300);
@@ -68,31 +64,19 @@
                                 <% }
                                     };
                                 %>
-                                <h4>Hello! let's get started</h4>
-
                                 <form id="login" class="pt-3" method="post" action="login">
-                                    <input type="hidden" name="action" value="login"/>
+                                    <input type="hidden" name="action" value="register"/>
                                     <div class="form-group">
-                                        <input type="email" class="form-control form-control-lg" id="exampleInputEmail1" name="email" placeholder="Email" required>
+                                        <input type="text" class="form-control form-control-lg" id="exampleInputName1" name="name" placeholder="Your Name" required>
                                     </div>
                                     <div class="form-group">
-                                        <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" name="password" placeholder="Password" required>
+                                        <input type="email" class="form-control form-control-lg" id="exampleInputEmail1" name="email" placeholder="Your Email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" name="password" placeholder="Your Password" required>
                                     </div>
                                     <div class="mt-3">
-                                        <input class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn" type="submit" value="SIGN IN"/>
-                                    </div>
-                                    <div class="my-2 d-flex justify-content-between align-items-center">
-                                        <div class="form-check">
-                                            <label class="form-check-label text-muted">
-                                                <input type="checkbox" class="form-check-input">
-                                                Keep me signed in
-                                            </label>
-                                        </div>
-                                        <a href="#" class="auth-link text-black">Forgot password?</a>
-                                    </div>
-
-                                    <div class="text-center mt-4 font-weight-light">
-                                        Don't have an account? <a href="Register.jsp" class="text-primary">Create</a>
+                                        <input class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn" type="submit" value="SIGN UP"/>
                                     </div>
                                 </form>
                             </div>
